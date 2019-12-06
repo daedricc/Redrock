@@ -1,5 +1,38 @@
 name: Redrock
-version: 1.0.0
+main: com.climpy.RedrockPlugin
+version: 1.0-ALPHA
 author: ClimpyX
-main: com.climpy.redrock.RedrockPlugin
-depend: [Library]
+commands:
+  broadcast:
+    aliases: [duyuru]
+    description: Sunucu içinde duyuru geçer.
+  day:
+    aliases: [gunduz, gündüz]
+    description: Oyunu gündüz yapar.
+  info:
+    aliases: [redrock]
+    description: Redrock eklentisi hakkinda bilgi verir.
+  night:
+    aliases: [gece]
+    description: Oyunu gece yapar.
+  createworld:
+    aliases: [worldcreate, generateworld]
+    description: Dünya oluşturur.
+  world:
+    aliases: [worldteleport, teleportworld]
+    description: Girilen dünyaya ışınlar.
+  gamemode:
+    aliases: [gm, oyunmodu]
+    description: Oyun modunu günceller.
+  chatclear:
+    aliases: [sohbetitemizle, clearchat, cc]
+    description: Sohbeti siler.
+  spawn:
+    aliases: [başlangıç]
+    description: Başlangıç noktasına gönderir.
+  setspawn:
+    aliases: [başlangıçayarla, spawnset]
+    description: Başlangıç noktasını ayarlar.
+  clear:
+    aliases: [envanterisil]
+    description: Mevcut envanteri siler.
