@@ -34,6 +34,9 @@ public class RedrockPlugin extends JavaPlugin {
         getCommand("spawn").setExecutor(new SpawnCommand());
         getCommand("setspawn").setExecutor(new SetSpawnCommand());
         getCommand("clear").setExecutor(new ClearCommand());
+        getCommand("setslots").setExecutor(new SetSlotsCommand());
+        getCommand("hat").setExecutor(new HatCommand());
+        getCommand("more").setExecutor(new MoreCommand());
     }
 
     public static RedrockPlugin getInstance() { return instance; }

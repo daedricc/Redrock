@@ -4,7 +4,7 @@ import com.climpy.RedrockPlugin;
 import com.climpy.profile.ProfilePlugin;
 import com.climpy.utils.C;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import com.climpy.utils.C;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;

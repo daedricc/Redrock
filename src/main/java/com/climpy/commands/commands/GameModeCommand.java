@@ -4,12 +4,11 @@ import com.climpy.Locale;
 import com.climpy.profile.ProfilePlugin;
 import com.climpy.profile.rank.RankType;
 import com.climpy.profile.user.User;
-import com.google.common.collect.ImmutableList;
+import com.climpy.utils.C;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -25,18 +24,18 @@ public class GameModeCommand implements CommandExecutor, TabExecutor {
             Player targetPlayer;
             User user = ProfilePlugin.getInstance().getUserManager().getUser(player.getUniqueId());
             if (!user.getRankType().isAboveOrEqual(RankType.MOD)) {
-                sender.sendMessage(ChatColor.RED + "Bu işlem için " + RankType.MOD.getColor() + RankType.MOD.getDisplayName() + ChatColor.RED + " ve üzeri rütbe gereklidir.");
+                sender.sendMessage(C.RED + "Bu işlem için " + RankType.MOD.getColor() + RankType.MOD.getDisplayName() + C.RED + " ve üzeri yetki gereklidir.");
                 return true;
             }
 
             if (args.length < 1) {
-                sender.sendMessage(ChatColor.RED + "Kullanım: /" + label + " <oyun-Modu> <oyuncuAdı>");
+                sender.sendMessage(C.RED + "Kullanım: /" + label + " <oyun-Modu> <oyuncuAdı>");
                 return true;
             }
 
             GameMode gameMode = gameModeName(args[0]);
             if (gameMode == null) {
-                sender.sendMessage(ChatColor.RED + "Girilen oyun modu '" + args[0] + "' geçersiz.");
+                sender.sendMessage(C.RED + "Girilen oyun modu '" + args[0] + "' geçersiz.");
                 return true;
             }
 
@@ -55,17 +54,17 @@ public class GameModeCommand implements CommandExecutor, TabExecutor {
             }
 
             if (targetPlayer.getGameMode() == gameMode) {
-                sender.sendMessage(ChatColor.RED + "Oyun modu " + targetPlayer.getName() + " için zaten " + ChatColor.WHITE + gameMode.name() + ChatColor.RED + '.');
+                sender.sendMessage(C.RED + "Oyun modu " + targetPlayer.getName() + " için zaten " + C.WHITE + gameMode.name() + C.RED + '.');
                 return true;
             }
 
 
             targetPlayer.setGameMode(gameMode);
             if (targetPlayer == sender) {
-                sender.sendMessage(ChatColor.GOLD + "Oyun modu sizin için " + ChatColor.WHITE + gameMode.name() + ChatColor.GOLD + " olarak ayarlandı.");
+                sender.sendMessage(C.GOLD + "Oyun modu sizin için " + C.WHITE + gameMode.name() + C.GOLD + " olarak ayarlandı.");
                 return true;
             }
-            sender.sendMessage(ChatColor.GOLD + "Oyun modu " + targetPlayer.getName() + ChatColor.GOLD + " için " + ChatColor.WHITE + gameMode.name() + ChatColor.GOLD + " olarak ayarlandı.");
+            sender.sendMessage(C.GOLD + "Oyun modu " + targetPlayer.getName() + C.GOLD + " için " + C.WHITE + gameMode.name() + C.GOLD + " olarak ayarlandı.");
             return true;
         }
 

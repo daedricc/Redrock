@@ -7,12 +7,12 @@ import java.text.MessageFormat;
 
 @AllArgsConstructor
 public enum Locale {
-    PLAYER_NOT_FOUND("§cBu isimde bir oyuncu bulunamadı."),
-    PLAYER_OFFLINE("§cOyuncu sunucu üzerinde açık değil.");
+    PLAYER_NOT_FOUND("&cBu isimde bir oyuncu bulunamadı."),
+    PLAYER_OFFLINE("&cOyuncu sunucu üzerinde açık değil.");
 
     private String msg;
 
     public static String format(Locale locale) {
-        return locale.msg;
+        return ChatColor.translateAlternateColorCodes('&', locale.msg);
     }
 }

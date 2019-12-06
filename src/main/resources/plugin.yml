@@ -36,3 +36,12 @@ commands:
   clear:
     aliases: [envanterisil]
     description: Mevcut envanteri siler.
+  setslots:
+    aliases: [slotayarla, maksimumoyuncu]
+    description: Maksimum oyuncu sayısını değiştirir.
+  hat:
+    aliases: [şapka]
+    description: Şapkanızı ayarlar.
+  more:
+    aliases: [dahası, dahafazla]
+    description: Elinizdeki eşyayı 1 stack yapar.

@@ -6,7 +6,6 @@ import com.climpy.profile.user.User;
 import com.climpy.utils.C;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -18,7 +17,7 @@ public class ChatClearCommand implements CommandExecutor {
         User user = ProfilePlugin.getInstance().getUserManager().getUser(sender.getName());
         if (sender instanceof Player) {
         if (!user.getRankType().isAboveOrEqual(RankType.CHAT_MOD)) {
-            sender.sendMessage(ChatColor.RED + "Bu işlem için " + RankType.CHAT_MOD.getColor() + RankType.CHAT_MOD.getDisplayName() + ChatColor.RED + " ve üzeri rütbe gereklidir.");
+            sender.sendMessage(C.RED + "Bu işlem için " + RankType.CHAT_MOD.getColor() + RankType.CHAT_MOD.getDisplayName() + C.RED + " ve üzeri yetki gereklidir.");
             return true;
         }
 
