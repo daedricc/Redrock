@@ -29,13 +29,13 @@ public class DayCommand implements CommandExecutor {
 
         if(args[0].equals("all")) {
             player.getWorld().setFullTime(6000L);
-            player.sendMessage(C.GREEN + "&aTüm oyuncular için şimdi gündüz vakti.");
+            player.sendMessage(C.GREEN + "Tüm oyuncular için şimdi gündüz vakti.");
             return true;
         }
 
         if(args[0].equals("player")) {
             player.setPlayerTime(6000L, false);
-            player.sendMessage(C.GREEN + "&aSadece sizin için şimdi gündüz vakti.");
+            player.sendMessage(C.GREEN + "Sadece sizin için şimdi gündüz vakti.");
             return true;
         }
         return true;

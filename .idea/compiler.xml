@@ -9,5 +9,8 @@
         <module name="Redrock" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="Redrock" target="8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

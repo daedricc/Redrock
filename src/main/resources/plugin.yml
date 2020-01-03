@@ -2,6 +2,7 @@ name: Redrock
 main: com.climpy.RedrockPlugin
 version: 1.0-ALPHA
 author: ClimpyX
+load: STARTUP
 commands:
   broadcast:
     aliases: [duyuru]
@@ -45,3 +46,57 @@ commands:
   more:
     aliases: [dahası, dahafazla]
     description: Elinizdeki eşyayı 1 stack yapar.
+  fly:
+    aliases: [uçuş, uç]
+    description: Uçuş modunuzu açar.
+  ping:
+    aliases: [gecikme, gecikmedeğeri]
+    description: Gecikme değerinizi öğrenmenize yarar.
+  teleport:
+    aliases: [tp, ışınlan]
+    description: Bir oyuncuya ışınlanmanıza yarar.
+  teleportall:
+    aliases: [tpall, herkesiışınlana]
+    description: Herkesi oyuncuya ışınlar.
+  tphere:
+    aliases: [teleporthere, burayaışınla]
+    description: Oyuncuya mevcut konumuzuna ışınlar.
+  tppos:
+    aliases: [teleportpos]
+    description: Girilen koordinatlara oyunucuyu ışınlar.
+  lobby:
+    descrtion: İsterseniz arka odaya geçelim.
+    aliases: [lobi, hub]
+  alert:
+    description: Global duyuru yapar.
+    aliases: [globalalert]
+  server:
+    description: Sunucu değiştirir.
+    aliases: [sunucu]
+  report:
+    aliases: [şikayet]
+  request:
+    aliases: [istek]
+  status:
+    description: Sunucu durumunu görüntüler.
+    aliases: [sunucudurumu, durum]
+  glist:
+    description: Tüm açık oyuncuları gösterir.
+    aliases: [globallist, tümoyuncular]
+  serverchange:
+    description: Sunucuyu değiştir.
+    aliases: [sunucudeğiştir, değiştir]
+  serverupdate:
+    description: Sunucuyu günceller.
+    aliases: [sunucugüncelle, güncelle]
+  ban:
+  blacklist:
+  kick:
+  mute:
+  unban:
+  unblacklist:
+  unmute:
+  speed:
+  sudo:
+  find:
+  whitelist:

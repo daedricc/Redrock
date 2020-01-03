@@ -30,13 +30,13 @@ public class NightCommand implements CommandExecutor {
 
         if(args[0].equals("all")) {
             player.getWorld().setFullTime(18000L);
-            player.sendMessage(C.RED + "&aTüm oyuncular için şimdi akşam vakti.");
+            player.sendMessage(C.GREEN + "Tüm oyuncular için şimdi akşam vakti.");
             return true;
         }
 
         if(args[0].equals("player")) {
             player.setPlayerTime(18000L, false);
-            player.sendMessage(C.RED + "&aSadece sizin için şimdi akşam vakti.");
+            player.sendMessage(C.GREEN + "Sadece sizin için şimdi akşam vakti.");
             return true;
         }
         return true;

@@ -4,6 +4,13 @@ server:
   id: 1
 max-redis-connections: 10
 redis:
-  server: "redis-14918.c228.us-central1-1.gce.cloud.redislabs.com"
-  port: 14918
-  password: "He3xNSiMeXaffh6cD47wOtJftonrL99v"
+  server: "localhost"
+  port: 6379
+  password: "sifremoruk"
+spawn:
+  world: lobby
+  x: 108.44956509838592
+  y: 73.0
+  z: -104.5114463887768
+  yaw: -131.47858
+  pitch: -0.30000943

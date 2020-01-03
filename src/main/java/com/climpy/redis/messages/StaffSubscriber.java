@@ -1,0 +1,81 @@
+package com.climpy.redis.messages;
+
+import com.climpy.RedrockPlugin;
+import com.climpy.profile.ProfilePlugin;
+import com.climpy.profile.rank.RankType;
+import com.climpy.profile.symbol.SymbolType;
+import com.climpy.profile.user.User;
+import com.climpy.profile.utils.fanciful.FancyMessage;
+import com.climpy.redis.data.DataSubscriber;
+import com.google.gson.JsonObject;
+import lombok.Getter;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+
+import java.util.UUID;
+
+public class StaffSubscriber extends DataSubscriber {
+    public StaffSubscriber() {
+    super(RedrockPlugin.getInstance(), "staff_join_leave");
+    }
+
+    public void handleMessage(JsonObject object) {
+    StaffEventType staffEventType = StaffEventType.getEventType(object.get("type").getAsString());
+    UUID uuid = UUID.fromString(object.get("uuid").getAsString());
+    String serverName = object.get("serverName").getAsString();
+    for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+      User onlineUser = ProfilePlugin.getInstance().getUserManager().getUser(onlinePlayer.getUniqueId());
+      if (onlineUser.getRankType().isAboveOrEqual(RankType.CHAT_MOD))
+        setMessageFormat(staffEventType, serverName, uuid).send(onlinePlayer);
+      }
+    }
+
+    private FancyMessage setMessageFormat(StaffEventType staffEventType, String serverName, UUID uuid) {
+    FancyMessage fancyMessage = new FancyMessage();
+    User eventUser = ProfilePlugin.getInstance().getUserManager().getUser(uuid);
+    fancyMessage.text(ChatColor.translateAlternateColorCodes('&', ChatColor.BLUE + "[Personel] " + ChatColor.AQUA + "(" + serverName + ") " + eventUser
+
+          .getName() + " " + staffEventType.getDescription()));
+    SymbolType symbolType = eventUser.getSymbolType();
+    fancyMessage.tooltip(ChatColor.GRAY + "Rütbe: " + eventUser.getRankType().getColor() + eventUser.getRankType().getDisplayName() +
+            "\n" + ChatColor.GRAY + "Sembol Türü: " + ((symbolType == SymbolType.SYMBOL_0) ? (ChatColor.GRAY + "Kullanılmıyor.") : (symbolType
+        .getPrefix() + ChatColor.GRAY + " (" + symbolType.getDisplayName() + ")")));
+    return fancyMessage;
+    }
+
+    public enum StaffEventType {
+    JOIN("sunucuya giriş yaptı.", "join"),
+    QUIT("sunucudan çıkış yaptı", "quit"),
+    UNKNOWN("durum bulunamadı.", "unknown");
+
+    StaffEventType(String description, String internalName) {
+      this.description = description;
+      this.internalName = internalName;
+    }
+
+    @Getter
+    private String description;
+
+    private String internalName;
+
+    public String getInternalName() {
+      return this.internalName;
+    }
+
+    public static StaffEventType getEventType(String eventState) {
+      StaffEventType[] arrayOfStaffEventType;
+      int i;
+      byte b;
+      for (arrayOfStaffEventType = values(), i = arrayOfStaffEventType.length, b = 0; b < i; ) {
+        StaffEventType staffEventType = arrayOfStaffEventType[b];
+        if (!staffEventType.getInternalName().equalsIgnoreCase(eventState.toLowerCase())) {
+          b++;
+          continue;
+        }
+        return staffEventType;
+      }
+      return UNKNOWN;
+      }
+    }
+}
