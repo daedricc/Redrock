@@ -3,16 +3,15 @@ package com.climpy.listener;
 import com.climpy.RedrockPlugin;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-
-import java.util.UUID;
-import java.util.logging.Level;
-
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
+
+import java.util.UUID;
+import java.util.logging.Level;
 
 public class ChannelListener implements PluginMessageListener, Listener {
   public void onPluginMessageReceived(String channel, Player player, byte[] bytes) {

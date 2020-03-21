@@ -1,11 +1,12 @@
 package com.climpy.utils;
 
 import com.climpy.config.FileConfig;
+import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
 
 public class ConfigUtils {
   private final FileConfig fileConfig;

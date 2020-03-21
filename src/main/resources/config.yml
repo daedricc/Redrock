@@ -7,6 +7,12 @@ redis:
   server: "localhost"
   port: 6379
   password: "sifremoruk"
+mongoDB:
+  user: climpy
+  database: admin
+  password: root
+  host: localhost
+  port: 27017
 spawn:
   world: lobby
   x: 108.44956509838592

@@ -1,20 +1,33 @@
 package com.climpy;
 
-import com.climpy.commands.commands.*;
-import com.climpy.commands.network.*;
-import com.climpy.commands.network.players.ReportCommand;
-import com.climpy.commands.network.players.RequestCommand;
+import com.climpy.core.commands.*;
+import com.climpy.core.network.*;
+import com.climpy.core.network.players.ReportCommand;
+import com.climpy.core.network.players.RequestCommand;
 import com.climpy.config.FileConfig;
 import com.climpy.inv.InventoryManager;
 import com.climpy.listener.ChannelListener;
+import com.climpy.listener.ChatListener;
 import com.climpy.listener.PlayerJoinListener;
+import com.climpy.profile.commands.ProfileCommand;
+import com.climpy.profile.commands.StaffChatCommand;
+import com.climpy.profile.commands.StaffModeCommand;
+import com.climpy.profile.listener.ProfileListener;
 import com.climpy.listener.RedrockListener;
-import com.climpy.profile.utils.TimeUtils;
+import com.climpy.mongo.MongoConnection;
+import com.climpy.profile.ProfileManager;
+import com.climpy.profile.rank.commands.ListRankCommand;
+import com.climpy.profile.rank.commands.SetRankCommand;
+import com.climpy.profile.redis.RedisPlayerCache;
+import com.climpy.profile.symbol.commands.SetSymbolCommand;
+import com.climpy.profile.symbol.commands.SymbolCommand;
+import com.climpy.punishments.Punishment;
+import com.climpy.punishments.PunishmentListener;
 import com.climpy.punishments.PunishmentManager;
 import com.climpy.punishments.args.*;
 import com.climpy.redis.RedisConnection;
 import com.climpy.redis.RedisManager;
-import com.climpy.server.ServerData;
+import com.climpy.report.ReportManager;
 import com.climpy.server.ServerState;
 import com.climpy.server.ServerType;
 import com.climpy.server.commands.ServerChangeCommand;
@@ -22,7 +35,8 @@ import com.climpy.server.commands.ServerUpdateCommand;
 import com.climpy.tasks.Lag;
 import com.climpy.tasks.ServerDataTask;
 import com.climpy.tasks.ServerRemoveTask;
-import com.climpy.utils.TimeUtil;
+import com.climpy.utils.menu.MenuListener;
+import com.google.gson.reflect.TypeToken;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -35,6 +49,8 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPubSub;
 
+import java.lang.reflect.Type;
+import java.util.List;
 import java.util.logging.Level;
 
 @Getter @Setter
@@ -43,27 +59,43 @@ public class RedrockPlugin extends JavaPlugin {
     private FileConfig mainConfig;
 
     private static InventoryManager invManager;
+
+    public ProfileManager profileManager;
+
+    private MongoConnection mongoConnection;
+
     private boolean enableRedisPubSub = false;
+
     private String serverName;
     private ServerType serverType;
     private ServerState serverState;
+
     private int serverID;
+
     private RedisManager redisManager;
     private RedisConnection redisConnection;
     public JedisPubSub jedisPubSub;
     public JedisPool jedisPool;
-    private final long startTime = System.currentTimeMillis();
 
+    private final long startTime = System.currentTimeMillis();
     private long lastUpTime = System.currentTimeMillis();
+
+    private RedisPlayerCache redisPlayerCache;
+
+    private ReportManager reportManager;
     private PunishmentManager punishmentManager;
 
     @Override
     public void onEnable() {
         instance = this;
+
         getServer().getMessenger().registerOutgoingPluginChannel((Plugin)this, "BungeeCord");
         getServer().getMessenger().registerIncomingPluginChannel((Plugin)this, "BungeeCord", (PluginMessageListener)new ChannelListener());
 
+        mongoConnection = new MongoConnection();
+        mongoConnection.setupDatabaseConnection();
 
+        profileManager = new ProfileManager();
 
         invManager = new InventoryManager(this);
         invManager.init();
@@ -73,52 +105,28 @@ public class RedrockPlugin extends JavaPlugin {
         registerCommands();
 
         if (!this.redisConnection.isSetupMode()) {
-            getLogger().log(Level.INFO, "===============================================");
-            getLogger().log(Level.INFO, "Sunucu ismi: " + this.serverName);
-            getLogger().log(Level.INFO, "Veritabankimli" + this.serverID);
-            getLogger().log(Level.INFO, "Sunucu t" + this.serverType.getDisplayName());
-            getLogger().log(Level.INFO, "===============================================");
+            getLogger().log(Level.INFO, "[Redis] - Sunucu: " + this.serverName + " - ID: " + serverID + " - Sunucu Tipi: " + this.getServerType().getDisplayName());
         }
     }
 
     @Override
     public void onDisable() {
-        if (getJedisPool() != null) {
-            Bukkit.getScheduler().cancelTasks((Plugin)this);
-            getLogger().log(Level.INFO, "Veritabanı kapatıldı.");
-                    getRedisConnection().setSetupMode(true);
-            getInstance().setServerState(ServerState.INACTIVE);
-            (new ServerDataTask(this)).run();
-            try {
-                if (isEnableRedisPubSub())
-                    this.jedisPubSub.unsubscribe();
-                this.jedisPool.destroy();
-                getLogger().log(Level.INFO, "Veritabanı kapatıldı.");
-            } catch (Exception ex) {
-                getLogger().log(Level.INFO, "Veritabanverileri kaydedilemedi.");
-            }
-        }
+        disableRedis();
         instance = null;
     }
-
 
     private void registerListeners() {
         PluginManager pm = getServer().getPluginManager();
 
-        pm.registerEvents((Listener)new ChannelListener(), (Plugin)this);
+        pm.registerEvents(new ChannelListener(), this);
+        pm.registerEvents(new ProfileListener(), this);
         pm.registerEvents(new PlayerJoinListener(), this);
         pm.registerEvents(new RedrockListener(), this);
+        pm.registerEvents(new MenuListener(), this);
+        pm.registerEvents(new PunishmentListener(), this);
+        pm.registerEvents(new ChatListener(), this);
     }
 
-    private void registerManagers() {
-        this.mainConfig = new FileConfig(this, "config.yml");
-
-        this.mainConfig = new FileConfig(this, "config.yml");
-        this.redisConnection = new RedisConnection(this);
-        this.redisManager = new RedisManager(this);
-        this.punishmentManager = new PunishmentManager(this);
-        registerSchedulers();
-    }
 
     private void registerCommands() {
         getCommand("broadcast").setExecutor(new BroadcastCommand());
@@ -141,6 +149,7 @@ public class RedrockPlugin extends JavaPlugin {
         getCommand("teleportall").setExecutor(new TeleportCommand());
         getCommand("tphere").setExecutor(new TeleportCommand());
         getCommand("tppos").setExecutor(new TeleportCommand());
+        getCommand("coins").setExecutor(new CoinsCommand());
 
         getCommand("alert").setExecutor(new AlertCommand());
         getCommand("server").setExecutor(new ServerCommand());
@@ -156,13 +165,59 @@ public class RedrockPlugin extends JavaPlugin {
         getCommand("find").setExecutor(new FindCommand());
         getCommand("whitelist").setExecutor(new WhitelistCommand());
 
-       getCommand("ban").setExecutor(new BanCommand());
-       getCommand("blacklist").setExecutor(new BlacklistCommand());
-       getCommand("kick").setExecutor(new KickCommand());
-       getCommand("mute").setExecutor(new MuteCommand());
-       getCommand("unban").setExecutor(new UnBanCommand());
-       getCommand("unblacklist").setExecutor(new UnBlacklistCommand());
-       getCommand("unmute").setExecutor(new UnMuteCommand());
+        getCommand("staffchat").setExecutor(new StaffChatCommand());
+        getCommand("staffmode").setExecutor(new StaffModeCommand());
+
+        getCommand("rank").setExecutor(new SetRankCommand());
+        getCommand("listrank").setExecutor(new ListRankCommand());
+
+        getCommand("profile").setExecutor(new ProfileCommand());
+
+        getCommand("symbol").setExecutor(new SymbolCommand());
+        getCommand("setsymbol").setExecutor(new SetSymbolCommand());
+        getCommand("whois").setExecutor(new WhoisCommand());
+
+        getCommand("ban").setExecutor(new BanCommand());
+        getCommand("blacklist").setExecutor(new BlacklistCommand());
+        getCommand("kick").setExecutor(new KickCommand());
+        getCommand("mute").setExecutor(new MuteCommand());
+        getCommand("unban").setExecutor(new UnBanCommand());
+        getCommand("unblacklist").setExecutor(new UnBlacklistCommand());
+        getCommand("unmute").setExecutor(new UnMuteCommand());
+        getCommand("warn").setExecutor(new WarnCommand());
+        getCommand("ipmute").setExecutor(new IPMuteCommand());
+        getCommand("ipban").setExecutor(new IPBanCommand());
+    }
+
+    private void disableRedis() {
+        if (getJedisPool() != null) {
+            Bukkit.getScheduler().cancelTasks((Plugin)this);
+            getLogger().log(Level.INFO, "Veritabanı kapatıldı.");
+            getRedisConnection().setSetupMode(true);
+            getInstance().setServerState(ServerState.INACTIVE);
+            (new ServerDataTask(this)).run();
+
+            try {
+                if (isEnableRedisPubSub())
+                    this.jedisPubSub.unsubscribe();
+                this.jedisPool.destroy();
+                getLogger().log(Level.INFO, "Veritabanı kapatıldı.");
+            } catch (Exception ex) {
+                getLogger().log(Level.INFO, "Veritaban verileri kaydedilemedi.");
+            }
+        }
+    }
+
+    private void registerManagers() {
+        this.mainConfig = new FileConfig(this, "config.yml");
+
+        this.redisConnection = new RedisConnection(this);
+        this.redisManager = new RedisManager(this);
+        this.redisPlayerCache = new RedisPlayerCache();
+        this.reportManager = new ReportManager();
+        this.punishmentManager = new PunishmentManager();
+
+        registerSchedulers();
     }
 
     private void registerSchedulers() {
@@ -185,4 +240,8 @@ public class RedrockPlugin extends JavaPlugin {
         }
         return chatColorType;
     }
+
+    public static Type LIST_STRING_TYPE = (new TypeToken<List<String>>() {
+
+    }).getType();
 }

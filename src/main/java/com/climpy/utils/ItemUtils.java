@@ -5,15 +5,16 @@
 
 package com.climpy.utils;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class ItemUtils {
     public ItemUtils() {
@@ -58,9 +59,9 @@ public class ItemUtils {
         ItemStack toReturn = new ItemStack(Material.SKULL_ITEM, 1, damage);
         SkullMeta itemMeta = (SkullMeta)toReturn.getItemMeta();
         itemMeta.setOwner(playerName);
-        List<String> loreList = new ArrayList(lore);
-        itemMeta.setLore(loreList);
-        itemMeta.setDisplayName(itemName);
+        List<String> loreList = new ArrayList(C.translate(lore));
+        itemMeta.setLore(C.translate(loreList));
+        itemMeta.setDisplayName(C.translate(itemName));
         toReturn.setItemMeta(itemMeta);
         return toReturn;
     }

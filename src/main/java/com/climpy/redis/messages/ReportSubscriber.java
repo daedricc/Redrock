@@ -1,9 +1,9 @@
 package com.climpy.redis.messages;
 
 import com.climpy.RedrockPlugin;
-import com.climpy.profile.ProfilePlugin;
+import com.climpy.RedrockPlugin;
+import com.climpy.profile.Profile;
 import com.climpy.profile.rank.RankType;
-import com.climpy.profile.user.User;
 import com.climpy.redis.data.DataSubscriber;
 import com.google.gson.JsonObject;
 import org.bukkit.Bukkit;
@@ -22,10 +22,10 @@ public class ReportSubscriber extends DataSubscriber {
       UUID reporterUUID = UUID.fromString(object.get("reporterUUID").getAsString());
       String serverName = object.get("serverName").getAsString();
       String message = object.get("message").getAsString();
-      User reportedUser = ProfilePlugin.getInstance().getUserManager().getUser(reportedUUID);
-      User reporterUser = ProfilePlugin.getInstance().getUserManager().getUser(reporterUUID);
+      Profile reportedUser = RedrockPlugin.getInstance().getProfileManager().getProfile(reportedUUID);
+      Profile reporterUser = RedrockPlugin.getInstance().getProfileManager().getProfile(reporterUUID);
       for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-        User onlineUser = ProfilePlugin.getInstance().getUserManager().getUser(onlinePlayer.getUniqueId());
+        Profile onlineUser = RedrockPlugin.getInstance().getProfileManager().getProfile(onlinePlayer.getUniqueId());
         if (onlineUser.getRankType().isAboveOrEqual(RankType.CHAT_MOD)) {
           String stringBuilder = ChatColor.GOLD + "[Rapor] " + ChatColor.WHITE + "[" + serverName + "] " + ChatColor.YELLOW + reportedUser.getName() + ChatColor.GRAY + ", " + ChatColor.YELLOW + reporterUser.getName() + ChatColor.GRAY + " tarafından raporlandı.\n" + ChatColor.GOLD + "     Neden: " + ChatColor.GRAY + message;
           onlinePlayer.sendMessage(stringBuilder);

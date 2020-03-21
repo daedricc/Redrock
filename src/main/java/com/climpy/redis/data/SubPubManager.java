@@ -1,7 +1,6 @@
 package com.climpy.redis.data;
 
 import com.climpy.RedrockPlugin;
-import com.climpy.commands.network.players.ReportCommand;
 import com.climpy.redis.messages.*;
 import com.climpy.utils.ConfigUtils;
 import com.elice.bedrock.redis.messages.extnds.RequestSubscriber;
@@ -33,9 +32,8 @@ public class SubPubManager {
     this.subscribers.add(new ReportSubscriber());
     this.subscribers.add(new RequestSubscriber());
     this.subscribers.add(new ServerDataSubscriber());
-    this.subscribers.add(new PunishmentSubscriber());
-    this.subscribers.add(new BanAlertSubscriber());
     this.subscribers.add(new WhitelistSubscriber());
+    this.subscribers.add(new PunishmentSubscriber());
   }
   
   public void createConnection() {

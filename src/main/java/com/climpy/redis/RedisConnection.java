@@ -22,35 +22,10 @@ import java.util.logging.Level;
 public class RedisConnection {
     private final RedrockPlugin redrockPlugin;
 
-    public void setDataPublisher(DataPublisher dataPublisher) {
-      this.dataPublisher = dataPublisher;
-    }
-
-    public void setDataManager(SubPubManager dataManager) {
-      this.dataManager = dataManager;
-    }
-
-    public RedrockPlugin getRedrockPlugin() {
-      return this.redrockPlugin;
-    }
-
     private boolean setupMode = true;
 
     private DataPublisher dataPublisher;
-
     private SubPubManager dataManager;
-
-    public boolean isSetupMode() {
-      return this.setupMode;
-    }
-
-    public DataPublisher getDataPublisher() {
-      return this.dataPublisher;
-    }
-
-    public SubPubManager getDataManager() {
-      return this.dataManager;
-    }
 
     public RedisConnection(RedrockPlugin redrockPlugin) {
       this.redrockPlugin = redrockPlugin;

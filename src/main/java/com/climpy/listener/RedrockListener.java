@@ -1,19 +1,16 @@
 package com.climpy.listener;
 
 import com.climpy.RedrockPlugin;
-import com.climpy.profile.ProfilePlugin;
+import com.climpy.RedrockPlugin;
+import com.climpy.profile.Profile;
 import com.climpy.profile.rank.RankType;
-import com.climpy.profile.user.User;
-import com.climpy.profile.user.UserManager;
 import com.climpy.redis.RedisConnection;
 import com.climpy.redis.RedisManager;
 import com.climpy.redis.data.DataPublisher;
 import com.climpy.redis.messages.StaffSubscriber;
 import com.climpy.server.ServerData;
 import com.climpy.server.provider.DefaultServerProvider;
-import com.climpy.utils.ConfigUtils;
 import com.google.gson.JsonObject;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -22,16 +19,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
-import org.bukkit.plugin.Plugin;
-
-import java.util.UUID;
 
 public class RedrockListener implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
     public void onPlayerJoinEvent(PlayerJoinEvent event) {
         event.setJoinMessage(null);
         Player player = event.getPlayer();
-        User user = ProfilePlugin.getInstance().getUserManager().getUser(player.getName());
+        Profile user = RedrockPlugin.getInstance().getProfileManager().getProfile(player.getName());
 
         DefaultServerProvider defaultServerProvider = new DefaultServerProvider();
         if (user.getRankType().isAboveOrEqual(RankType.CHAT_MOD)) {
@@ -50,7 +44,7 @@ public class RedrockListener implements Listener {
     public void onPlayerQuitEvent(PlayerQuitEvent event) {
         event.setQuitMessage(null);
         Player player = event.getPlayer();
-        User user = ProfilePlugin.getInstance().getUserManager().getUser(player.getUniqueId());
+        Profile user = RedrockPlugin.getInstance().getProfileManager().getProfile(player.getUniqueId());
 
         DefaultServerProvider defaultServerProvider = new DefaultServerProvider();
         if (user.getRankType().isAboveOrEqual(RankType.CHAT_MOD)) {
@@ -80,7 +74,7 @@ public class RedrockListener implements Listener {
         RedisConnection redisConnection = RedrockPlugin.getInstance().getRedisConnection();
         Player eventPlayer = event.getPlayer();
         if (redisConnection.isSetupMode()) {
-            User eventUser = ProfilePlugin.getInstance().getUserManager().getUser(eventPlayer.getUniqueId());
+            Profile eventUser = RedrockPlugin.getInstance().getProfileManager().getProfile(eventPlayer.getUniqueId());
             if (eventUser.getRankType().isAboveOrEqual(RankType.MOD) && eventUser.isStaffChat())
                 return;
             event.setCancelled(true);
@@ -99,7 +93,7 @@ public class RedrockListener implements Listener {
         ServerData serverData = redisManager.getSuitableLobby();
         if (serverData == null)
             return;
-        User eventUser = ProfilePlugin.getInstance().getUserManager().getUser(eventPlayer.getUniqueId());
+        Profile eventUser = RedrockPlugin.getInstance().getProfileManager().getProfile(eventPlayer.getUniqueId());
         if (!eventUser.getRankType().isAboveOrEqual(RankType.CHAT_MOD)) {
             event.setCancelled(true);
             String kickReason = ChatColor.RED + "Sunucudan atıldınız: " + ChatColor.LIGHT_PURPLE + serverName + ChatColor.RED + ": " + ChatColor.YELLOW + event.getReason();

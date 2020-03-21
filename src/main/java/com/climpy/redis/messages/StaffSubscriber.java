@@ -1,12 +1,10 @@
 package com.climpy.redis.messages;
 
 import com.climpy.RedrockPlugin;
-import com.climpy.profile.ProfilePlugin;
+import com.climpy.profile.Profile;
 import com.climpy.profile.rank.RankType;
-import com.climpy.profile.symbol.SymbolType;
-import com.climpy.profile.user.User;
-import com.climpy.profile.utils.fanciful.FancyMessage;
 import com.climpy.redis.data.DataSubscriber;
+import com.climpy.utils.fanciful.FancyMessage;
 import com.google.gson.JsonObject;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -25,7 +23,7 @@ public class StaffSubscriber extends DataSubscriber {
     UUID uuid = UUID.fromString(object.get("uuid").getAsString());
     String serverName = object.get("serverName").getAsString();
     for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-      User onlineUser = ProfilePlugin.getInstance().getUserManager().getUser(onlinePlayer.getUniqueId());
+      Profile onlineUser = RedrockPlugin.getInstance().getProfileManager().getProfile(onlinePlayer.getUniqueId());
       if (onlineUser.getRankType().isAboveOrEqual(RankType.CHAT_MOD))
         setMessageFormat(staffEventType, serverName, uuid).send(onlinePlayer);
       }
@@ -33,14 +31,15 @@ public class StaffSubscriber extends DataSubscriber {
 
     private FancyMessage setMessageFormat(StaffEventType staffEventType, String serverName, UUID uuid) {
     FancyMessage fancyMessage = new FancyMessage();
-    User eventUser = ProfilePlugin.getInstance().getUserManager().getUser(uuid);
+    Profile eventUser = RedrockPlugin.getInstance().getProfileManager().getProfile(uuid);
     fancyMessage.text(ChatColor.translateAlternateColorCodes('&', ChatColor.BLUE + "[Personel] " + ChatColor.AQUA + "(" + serverName + ") " + eventUser
-
           .getName() + " " + staffEventType.getDescription()));
-    SymbolType symbolType = eventUser.getSymbolType();
-    fancyMessage.tooltip(ChatColor.GRAY + "Rütbe: " + eventUser.getRankType().getColor() + eventUser.getRankType().getDisplayName() +
-            "\n" + ChatColor.GRAY + "Sembol Türü: " + ((symbolType == SymbolType.SYMBOL_0) ? (ChatColor.GRAY + "Kullanılmıyor.") : (symbolType
-        .getPrefix() + ChatColor.GRAY + " (" + symbolType.getDisplayName() + ")")));
+
+
+    //SymbolType symbolType = eventUser.getSymbolType();
+    //fancyMessage.tooltip(ChatColor.GRAY + "Rütbe: " + eventUser.getRankType().getColor() + eventUser.getRankType().getDisplayName() +
+     //       "\n" + ChatColor.GRAY + "Sembol Türü: " + ((symbolType == SymbolType.SYMBOL_0) ? (ChatColor.GRAY + "Kullanılmıyor.") : (symbolType
+       // .getPrefix() + ChatColor.GRAY + " (" + symbolType.getDisplayName() + ")")));
     return fancyMessage;
     }
 

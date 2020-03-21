@@ -5,8 +5,9 @@ import com.climpy.utils.ConfigUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import java.util.logging.Level;
 import redis.clients.jedis.Jedis;
+
+import java.util.logging.Level;
 
 public class DataPublisher {
     private final RedrockPlugin redrockPlugin;

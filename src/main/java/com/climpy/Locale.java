@@ -3,8 +3,6 @@ package com.climpy;
 import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
 
-import java.text.MessageFormat;
-
 @AllArgsConstructor
 public enum Locale {
     PLAYER_NOT_FOUND("&cBu isimde bir oyuncu bulunamadı."),

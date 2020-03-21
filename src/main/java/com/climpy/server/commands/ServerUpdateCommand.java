@@ -1,28 +1,24 @@
 package com.climpy.server.commands;
 
 import com.climpy.RedrockPlugin;
-import com.climpy.profile.ProfilePlugin;
+import com.climpy.RedrockPlugin;
+import com.climpy.profile.Profile;
 import com.climpy.profile.rank.RankType;
-import com.climpy.profile.user.User;
 import com.climpy.tasks.ServerDataTask;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.conversations.Conversable;
-import org.bukkit.conversations.ConversationContext;
-import org.bukkit.conversations.Prompt;
-import org.bukkit.conversations.StringPrompt;
 
 import java.util.logging.Level;
 
 public class ServerUpdateCommand implements CommandExecutor  {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
-        User user = ProfilePlugin.getInstance().getUserManager().getUser(sender.getName());
+        Profile user = RedrockPlugin.getInstance().getProfileManager().getProfile(sender.getName());
         if (!user.getRankType().isAboveOrEqual(RankType.CO_OWNER)) {
             sender.sendMessage(ChatColor.RED + "Bu için " + RankType.CO_OWNER.getColor() + RankType.CO_OWNER
-                    .getDisplayName() + ChatColor.RED + " üzeri gerekir..");
+                    .getDisplayName() + ChatColor.RED + " üzeri gerekir.");
             return true;
       }
 

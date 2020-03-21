@@ -1,9 +1,9 @@
 package com.elice.bedrock.redis.messages.extnds;
 
 import com.climpy.RedrockPlugin;
-import com.climpy.profile.ProfilePlugin;
+import com.climpy.RedrockPlugin;
+import com.climpy.profile.Profile;
 import com.climpy.profile.rank.RankType;
-import com.climpy.profile.user.User;
 import com.climpy.redis.data.DataSubscriber;
 import com.google.gson.JsonObject;
 import org.bukkit.Bukkit;
@@ -21,9 +21,9 @@ public class RequestSubscriber extends DataSubscriber {
         UUID uuid = UUID.fromString(object.get("uuid").getAsString());
         String serverName = object.get("serverName").getAsString();
         String message = object.get("message").getAsString();
-        User requestedUser = ProfilePlugin.getInstance().getUserManager().getUser(uuid);
+        Profile requestedUser = RedrockPlugin.getInstance().getProfileManager().getProfile(uuid);
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-            User onlineUser = ProfilePlugin.getInstance().getUserManager().getUser(onlinePlayer.getUniqueId());
+            Profile onlineUser = RedrockPlugin.getInstance().getProfileManager().getProfile(onlinePlayer.getUniqueId());
             if (onlineUser.getRankType().isAboveOrEqual(RankType.CHAT_MOD)) {
                 String stringBuilder = ChatColor.DARK_GREEN + "[İstek] " + ChatColor.WHITE + "[" + serverName + "] " + ChatColor.GREEN + requestedUser.getName() + ChatColor.GRAY + " yeni bir istek gönderdi.\n" + ChatColor.DARK_GREEN + "     Neden: " + ChatColor.GRAY + message;
                 onlinePlayer.sendMessage(stringBuilder);

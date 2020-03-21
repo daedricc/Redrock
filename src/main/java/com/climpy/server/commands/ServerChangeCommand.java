@@ -1,9 +1,9 @@
 package com.climpy.server.commands;
 
 import com.climpy.RedrockPlugin;
-import com.climpy.profile.ProfilePlugin;
+import com.climpy.RedrockPlugin;
+import com.climpy.profile.Profile;
 import com.climpy.profile.rank.RankType;
-import com.climpy.profile.user.User;
 import com.climpy.redis.RedisManager;
 import com.climpy.server.ServerData;
 import com.climpy.server.ServerState;
@@ -22,7 +22,7 @@ import java.util.List;
 public class ServerChangeCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        User user = ProfilePlugin.getInstance().getUserManager().getUser(sender.getName());
+        Profile user = RedrockPlugin.getInstance().getProfileManager().getProfile(sender.getName());
         if (!user.getRankType().isAboveOrEqual(RankType.CHAT_MOD)) {
             sender.sendMessage(C.RED + "Bu işlem için " + RankType.CHAT_MOD.getColor() + RankType.CHAT_MOD.getDisplayName() + C.RED + " ve üzeri yetki gereklidir.");
             return true;

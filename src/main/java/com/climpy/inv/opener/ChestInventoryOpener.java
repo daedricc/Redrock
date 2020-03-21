@@ -2,7 +2,6 @@ package com.climpy.inv.opener;
 
 import com.climpy.inv.InventoryManager;
 import com.climpy.inv.SmartInventory;
-import com.google.common.base.Preconditions;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;

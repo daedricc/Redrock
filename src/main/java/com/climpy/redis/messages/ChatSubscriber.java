@@ -1,16 +1,16 @@
 package com.climpy.redis.messages;
 
 import com.climpy.RedrockPlugin;
-import com.climpy.profile.ProfilePlugin;
+import com.climpy.profile.Profile;
+import com.climpy.profile.ProfileManager;
 import com.climpy.profile.rank.RankType;
-import com.climpy.profile.user.User;
-import com.climpy.profile.user.UserManager;
 import com.climpy.redis.data.DataSubscriber;
 import com.google.gson.JsonObject;
-import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 public class ChatSubscriber extends DataSubscriber {
   public ChatSubscriber() {
@@ -22,9 +22,9 @@ public class ChatSubscriber extends DataSubscriber {
     String serverName = object.get("serverName").getAsString();
     String message = object.get("message").getAsString();
     for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-      User onlineUser = ProfilePlugin.getInstance().getUserManager().getUser(onlinePlayer.getUniqueId());
+      Profile onlineUser = RedrockPlugin.getInstance().getProfileManager().getProfile(onlinePlayer.getUniqueId());
       RankType rankType = onlineUser.getRankType();
-      if (rankType.isAboveOrEqual(RankType.CHAT_MOD) && onlineUser.isStaffChatVisible())
+      if (rankType.isAboveOrEqual(RankType.CHAT_MOD))
         onlinePlayer.sendMessage(setMessageFormat(serverName, setPrefix(uuid), message)); 
     } 
   }
@@ -34,11 +34,11 @@ public class ChatSubscriber extends DataSubscriber {
       
       ChatColor.translateAlternateColorCodes('&', message);
   }
-  
+
   private String setPrefix(UUID eventPlayerUUID) {
-    UserManager userManager = ProfilePlugin.getInstance().getUserManager();
-    User eventUser = userManager.getUser(eventPlayerUUID);
+    ProfileManager profileManager = RedrockPlugin.getInstance().getProfileManager();
+    Profile eventUser = RedrockPlugin.getInstance().getProfileManager().getProfile(eventPlayerUUID);
     eventUser.getRankType();
-    return eventUser.getSymbolType().getPrefix() + " " + eventUser.getRankType().getColor() + eventUser.getName() + ChatColor.RESET;
+    return eventUser.getRankType().getColor() + eventUser.getName() + ChatColor.RESET;
   }
 }

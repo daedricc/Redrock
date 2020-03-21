@@ -1,6 +1,6 @@
 package com.climpy.listener;
 
-import com.climpy.commands.Core;
+import com.climpy.core.Core;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

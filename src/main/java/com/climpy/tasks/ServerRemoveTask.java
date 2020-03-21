@@ -1,9 +1,9 @@
 package com.climpy.tasks;
 
 import com.climpy.RedrockPlugin;
-import com.climpy.profile.ProfilePlugin;
+import com.climpy.RedrockPlugin;
+import com.climpy.profile.Profile;
 import com.climpy.profile.rank.RankType;
-import com.climpy.profile.user.User;
 import com.climpy.redis.RedisManager;
 import com.climpy.server.ServerData;
 import com.climpy.server.ServerState;
@@ -37,9 +37,9 @@ public class ServerRemoveTask extends BukkitRunnable {
         } 
         deletedServer.remove();
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-          User onlineUser = ProfilePlugin.getInstance().getUserManager().getUser(onlinePlayer.getUniqueId());
+          Profile onlineUser = RedrockPlugin.getInstance().getProfileManager().getProfile(onlinePlayer.getUniqueId());
           if (onlineUser.getRankType().isAboveOrEqual(RankType.CHAT_MOD)) {
-            String stringBuilder = C.GRAY + "[M] " + C.WHITE + "Çöktüğü için kapatılan sunucu: (" + serverName + ")";
+            String stringBuilder = C.GRAY + "[Network] " + C.WHITE + "Kaldırılan sunucu, " + serverName + ".";
             onlinePlayer.sendMessage(stringBuilder);
           }
         }

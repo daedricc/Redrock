@@ -3,10 +3,10 @@ package com.climpy.server.provider;
 import com.climpy.RedrockPlugin;
 import com.climpy.server.ServerState;
 import com.climpy.server.ServerType;
-import java.net.InetSocketAddress;
-
 import com.climpy.tasks.Lag;
 import org.bukkit.Bukkit;
+
+import java.net.InetSocketAddress;
 
 public class DefaultServerProvider implements IServerProvider {
   public String getServerName() {

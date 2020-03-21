@@ -1,12 +1,13 @@
 name: Redrock
 main: com.climpy.RedrockPlugin
-version: 1.0-ALPHA
+version: 1.1-ALPHA
 author: ClimpyX
 load: STARTUP
 commands:
   broadcast:
     aliases: [duyuru]
     description: Sunucu içinde duyuru geçer.
+  coins:
   day:
     aliases: [gunduz, gündüz]
     description: Oyunu gündüz yapar.
@@ -89,14 +90,47 @@ commands:
   serverupdate:
     description: Sunucuyu günceller.
     aliases: [sunucugüncelle, güncelle]
-  ban:
-  blacklist:
-  kick:
-  mute:
-  unban:
-  unblacklist:
-  unmute:
   speed:
+    description: Hızı günceller.
+    aliases: [hız]
   sudo:
+    description: Bir oyuncuya komut kullandırır.
+    aliases: [komutyürüt, yürüt]
   find:
+    description: Oyuncunun olduğu sunucuyu gösterir.
+    aliases: [bul]
   whitelist:
+    description: Beyazlisteyi açar/kapatır.
+    aliases: [beyazliste]
+  staffchat:
+    description: Personel sohbetini açar/kapatır.
+    aliases:  [personelsohbeti, chatstaff]
+  staffmode:
+    description: Personel modunu açar/kapatır.
+    aliases: [personelmodu, modmode, mod, staff]
+  rank:
+    description: Rütbeyi günceller.
+    aliases: [rütbe, rütbeyigüncelle, yetki, yetkilendirme]
+  listrank:
+    description: Tüm rütbeleri gösterir.
+    aliases: [listranks, rütbelerilistele, yetkilerilistele]
+  profile:
+    description: Profil menüsünü açar.
+    aliases: [profil, staffmenu]
+  symbol:
+    description: Sembol menüsünü açar.
+    aliases: [sembol]
+  setsymbol:
+    description: Sembolü günceller.
+    aliases: [sembolügüncelle, sembolayarla, ayarlasembol]
+  whois:
+  ban:
+  unban:
+  blacklist:
+  unblacklist:
+  mute:
+  unmute:
+  kick:
+  warn:
+  ipban:
+  ipmute:

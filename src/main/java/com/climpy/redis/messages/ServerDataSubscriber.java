@@ -1,9 +1,9 @@
 package com.climpy.redis.messages;
 
 import com.climpy.RedrockPlugin;
-import com.climpy.profile.ProfilePlugin;
+import com.climpy.RedrockPlugin;
+import com.climpy.profile.Profile;
 import com.climpy.profile.rank.RankType;
-import com.climpy.profile.user.User;
 import com.climpy.redis.RedisManager;
 import com.climpy.redis.data.DataSubscriber;
 import com.climpy.server.ServerData;
@@ -12,11 +12,9 @@ import com.climpy.server.ServerType;
 import com.climpy.utils.C;
 import com.google.gson.JsonObject;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.net.InetSocketAddress;
-import java.util.logging.Level;
 
 public class ServerDataSubscriber extends DataSubscriber {
   public ServerDataSubscriber() {
@@ -54,9 +52,9 @@ public class ServerDataSubscriber extends DataSubscriber {
     if (serverData == null) {
       serverData = new ServerData();
       for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-        User onlineUser = ProfilePlugin.getInstance().getUserManager().getUser(onlinePlayer.getUniqueId());
+        Profile onlineUser = RedrockPlugin.getInstance().getProfileManager().getProfile(onlinePlayer.getUniqueId());
         if (onlineUser.getRankType().isAboveOrEqual(RankType.CHAT_MOD)) {
-          String stringBuilder = C.GRAY + "[M] " + C.WHITE + "Sunucu ağa eklendi. (" + serverName + ")";
+          String stringBuilder = C.GRAY + "[Network] " + C.WHITE + "Sunucu ağa eklendi, " + serverName + ".";
           onlinePlayer.sendMessage(stringBuilder);
         }
       }

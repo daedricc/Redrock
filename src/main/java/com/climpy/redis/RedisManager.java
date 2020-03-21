@@ -2,8 +2,8 @@ package com.climpy.redis;
 
 import com.climpy.RedrockPlugin;
 import com.climpy.listener.ChannelListener;
-import com.climpy.redis.messages.MessageSubscriber;
 import com.climpy.redis.data.DataPublisher;
+import com.climpy.redis.messages.MessageSubscriber;
 import com.climpy.server.ServerData;
 import com.climpy.server.ServerState;
 import com.climpy.server.ServerType;
