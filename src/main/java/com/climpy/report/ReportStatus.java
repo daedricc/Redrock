@@ -3,7 +3,8 @@ package com.climpy.report;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor @Getter
+@AllArgsConstructor
+@Getter
 public enum ReportStatus {
     ACTIVE("Aktif", "active"),
     PROCESS("İşlemde", "process"),

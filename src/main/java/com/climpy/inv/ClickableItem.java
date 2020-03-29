@@ -16,15 +16,20 @@ public class ClickableItem {
     }
 
     public static ClickableItem empty(ItemStack item) {
-        return of(item, e -> {});
+        return of(item, e -> {
+        });
     }
 
     public static ClickableItem of(ItemStack item, Consumer<InventoryClickEvent> consumer) {
         return new ClickableItem(item, consumer);
     }
 
-    public void run(InventoryClickEvent e) { consumer.accept(e); }
+    public void run(InventoryClickEvent e) {
+        consumer.accept(e);
+    }
 
-    public ItemStack getItem() { return item; }
+    public ItemStack getItem() {
+        return item;
+    }
 
 }

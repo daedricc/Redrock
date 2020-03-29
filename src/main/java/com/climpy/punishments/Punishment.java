@@ -10,7 +10,9 @@ import org.bukkit.Bukkit;
 
 import java.util.UUID;
 
-@Setter @Getter @Data
+@Setter
+@Getter
+@Data
 public abstract class Punishment implements Cloneable {
     protected UUID uniqueUUID;
     protected UUID addedBy;
@@ -77,7 +79,7 @@ public abstract class Punishment implements Cloneable {
         jsonObject.addProperty("date", this.date);
         jsonObject.addProperty("duration", this.duration);
         jsonObject.addProperty("active", this.active);
-        if(!this.active) {
+        if (!this.active) {
             if (this.removedBy != null) {
                 jsonObject.addProperty("removedBy", this.removedBy.toString());
             }
@@ -101,7 +103,7 @@ public abstract class Punishment implements Cloneable {
     }
 
     public boolean isPermanent() {
-        return this.duration == Integer.MAX_VALUE;
+        return this.duration == Long.MAX_VALUE;
     }
 
     public boolean isExpired() {
@@ -109,5 +111,6 @@ public abstract class Punishment implements Cloneable {
     }
 
     public abstract String getWarningMessage(boolean active, boolean silent);
+
     public abstract StringBuilder getPunishmentMessage();
 }

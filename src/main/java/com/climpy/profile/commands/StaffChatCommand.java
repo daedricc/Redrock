@@ -1,5 +1,6 @@
 package com.climpy.profile.commands;
 
+import com.climpy.Locale;
 import com.climpy.RedrockPlugin;
 import com.climpy.profile.Profile;
 import com.climpy.profile.rank.RankType;
@@ -17,13 +18,12 @@ public class StaffChatCommand implements CommandExecutor {
         Profile user = RedrockPlugin.getInstance().getProfileManager().getProfile(player.getUniqueId());
         if (sender instanceof Player) {
             if (!user.getRankType().isAboveOrEqual(RankType.MOD)) {
-                sender.sendMessage(ChatColor.RED + "Bu işlem için " + RankType.MOD
-                        .getColor() + RankType.MOD.getDisplayName() + ChatColor.RED + " ve üzeri rütbe gereklidir.");
+                sender.sendMessage(Locale.format(Locale.NO_PERM));
                 return true;
             }
 
             boolean newStaffChatStatus = !user.isStaffChat();
-              user.setStaffChat(newStaffChatStatus);
+            user.setStaffChat(newStaffChatStatus);
             sender.sendMessage(ChatColor.GOLD + "Staff Sohbeti " + (newStaffChatStatus ? (ChatColor.GREEN + "açıldı.") : (ChatColor.DARK_RED + "kapatıldı.")));
 
             user.saveProfile();

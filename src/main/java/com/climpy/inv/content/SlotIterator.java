@@ -15,24 +15,31 @@ public interface SlotIterator {
     }
 
     Optional<ClickableItem> get();
+
     SlotIterator set(ClickableItem item);
 
     SlotIterator previous();
+
     SlotIterator next();
 
     SlotIterator blacklist(int row, int column);
+
     SlotIterator blacklist(SlotPos slotPos);
 
     int row();
+
     SlotIterator row(int row);
 
     int column();
+
     SlotIterator column(int column);
 
     boolean started();
+
     boolean ended();
 
     boolean doesAllowOverride();
+
     SlotIterator allowOverride(boolean override);
 
 
@@ -73,7 +80,7 @@ public interface SlotIterator {
 
         @Override
         public SlotIterator set(ClickableItem item) {
-            if(canPlace())
+            if (canPlace())
                 contents.set(row, column, item);
 
             return this;
@@ -81,21 +88,20 @@ public interface SlotIterator {
 
         @Override
         public SlotIterator previous() {
-            if(row == 0 && column == 0) {
+            if (row == 0 && column == 0) {
                 this.started = true;
                 return this;
             }
 
             do {
-                if(!this.started) {
+                if (!this.started) {
                     this.started = true;
-                }
-                else {
-                    switch(type) {
+                } else {
+                    switch (type) {
                         case HORIZONTAL:
                             column--;
 
-                            if(column == 0) {
+                            if (column == 0) {
                                 column = inv.getColumns() - 1;
                                 row--;
                             }
@@ -103,7 +109,7 @@ public interface SlotIterator {
                         case VERTICAL:
                             row--;
 
-                            if(row == 0) {
+                            if (row == 0) {
                                 row = inv.getRows() - 1;
                                 column--;
                             }
@@ -111,40 +117,39 @@ public interface SlotIterator {
                     }
                 }
             }
-            while(!canPlace() && (row != 0 || column != 0));
+            while (!canPlace() && (row != 0 || column != 0));
 
             return this;
         }
 
         @Override
         public SlotIterator next() {
-            if(ended()) {
+            if (ended()) {
                 this.started = true;
                 return this;
             }
 
             do {
-                if(!this.started) {
+                if (!this.started) {
                     this.started = true;
-                }
-                else {
-                    switch(type) {
+                } else {
+                    switch (type) {
                         case HORIZONTAL:
                             column = ++column % inv.getColumns();
 
-                            if(column == 0)
+                            if (column == 0)
                                 row++;
                             break;
                         case VERTICAL:
                             row = ++row % inv.getRows();
 
-                            if(row == 0)
+                            if (row == 0)
                                 column++;
                             break;
                     }
                 }
             }
-            while(!canPlace() && !ended());
+            while (!canPlace() && !ended());
 
             return this;
         }
@@ -161,7 +166,9 @@ public interface SlotIterator {
         }
 
         @Override
-        public int row() { return row; }
+        public int row() {
+            return row;
+        }
 
         @Override
         public SlotIterator row(int row) {
@@ -170,7 +177,9 @@ public interface SlotIterator {
         }
 
         @Override
-        public int column() { return column; }
+        public int column() {
+            return column;
+        }
 
         @Override
         public SlotIterator column(int column) {
@@ -190,7 +199,9 @@ public interface SlotIterator {
         }
 
         @Override
-        public boolean doesAllowOverride() { return allowOverride; }
+        public boolean doesAllowOverride() {
+            return allowOverride;
+        }
 
         @Override
         public SlotIterator allowOverride(boolean override) {

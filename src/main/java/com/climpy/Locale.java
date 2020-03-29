@@ -1,12 +1,17 @@
 package com.climpy;
 
+import com.climpy.utils.C;
 import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
 
 @AllArgsConstructor
 public enum Locale {
-    PLAYER_NOT_FOUND("&cBu isimde bir oyuncu bulunamadı."),
-    PLAYER_OFFLINE("&cOyuncu sunucu üzerinde açık değil.");
+    TURKISH(""),
+    ENGLISH(""),
+
+    PLAYER_NOT_FOUND("&cBu isimde bir oyuncu veritabanında bulunamadı."),
+    PLAYER_OFFLINE("&cOyuncu sunucu üzerinde açık değil."),
+    NO_PERM(C.DARK_RED + C.UNICODE_CAUTION + " &cYetkiye sahip değilsin.");
 
     private String msg;
 

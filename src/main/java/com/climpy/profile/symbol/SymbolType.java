@@ -11,7 +11,7 @@ public enum SymbolType {
     SYMBOL_13("Sembol 13", "§e§lMASTER ", RankType.CVIP),
     SYMBOL_12("Sembol 12", "§e§lPRO ", RankType.CVIP),
     SYMBOL_11("Sembol 11", "§e§l❝E❞ ", RankType.CVIP),
-    SYMBOL_10("Sembol 10","§a§lE ", RankType.CVIP),
+    SYMBOL_10("Sembol 10", "§a§lE ", RankType.CVIP),
     SYMBOL_9("Sembol 9", "§a§l❦ ", RankType.MVIPPLUS),
     SYMBOL_8("Sembol 8", "§a§l✦ ", RankType.MVIPPLUS),
     SYMBOL_7("Sembol 7", "§a§l✎ ", RankType.MVIP),
@@ -64,4 +64,4 @@ public enum SymbolType {
         }
         return SYMBOL_0;
     }
-    }
+}

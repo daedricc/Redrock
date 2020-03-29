@@ -1,6 +1,6 @@
 name: Redrock
 main: com.climpy.RedrockPlugin
-version: 1.1-ALPHA
+version: 1.2.1
 author: ClimpyX
 load: STARTUP
 commands:
@@ -8,6 +8,8 @@ commands:
     aliases: [duyuru]
     description: Sunucu içinde duyuru geçer.
   coins:
+    aliases: [kredi, moosycoins, mc, mcoins, moosyc]
+    description: MoosyCoinlerinizi yönetebilir veya görebilirsiniz.
   day:
     aliases: [gunduz, gündüz]
     description: Oyunu gündüz yapar.
@@ -29,12 +31,6 @@ commands:
   chatclear:
     aliases: [sohbetitemizle, clearchat, cc]
     description: Sohbeti siler.
-  spawn:
-    aliases: [başlangıç]
-    description: Başlangıç noktasına gönderir.
-  setspawn:
-    aliases: [başlangıçayarla, spawnset]
-    description: Başlangıç noktasını ayarlar.
   clear:
     aliases: [envanterisil]
     description: Mevcut envanteri siler.
@@ -104,10 +100,13 @@ commands:
     aliases: [beyazliste]
   staffchat:
     description: Personel sohbetini açar/kapatır.
-    aliases:  [personelsohbeti, chatstaff]
+    aliases:  [personelsohbeti, sc]
   staffmode:
     description: Personel modunu açar/kapatır.
-    aliases: [personelmodu, modmode, mod, staff]
+    aliases: [personelmodu, modmode, mod, staff, sm]
+  vanish:
+    description: Görünmez yapar.
+    aliases: [görünmez, v]
   rank:
     description: Rütbeyi günceller.
     aliases: [rütbe, rütbeyigüncelle, yetki, yetkilendirme]
@@ -124,13 +123,76 @@ commands:
     description: Sembolü günceller.
     aliases: [sembolügüncelle, sembolayarla, ayarlasembol]
   whois:
+    description: Kullanıcı hakkında bilgileri gösterir.
+    aliases: [kim]
   ban:
+    description: Kullanıcıyı yasaklar.
+    aliases: [yasakla, thor]
   unban:
+    description: Kullanıcının yasağını geri çeker.
+    aliases: [yasakkaldır]
   blacklist:
+    description: Kullanıcıyı karalisteye alır.
+    aliases: [karaliste]
   unblacklist:
+    description: Kullanıcıyı karalisteden geri çeker.
+    aliases: [karalistedençıkar]
   mute:
+    description: Kullanıcıyı susturur.
+    aliases: [sustur, çenesinikapat]
   unmute:
+    description: Kullanıcının susturulmasını geri çeker.
+    aliases: [susturmayıgerial, susturmakaldır]
   kick:
+    description: Kullanıcıyı atar.
+    aliases: [dep, at, kafasınaatla, sunucudanat]
   warn:
+    description: Kullanıcıya uyarı verir.
+    aliases: [uyarıver, uyar]
   ipban:
+    description: Kullanıcıya IPYasaklama atar.
+    aliases: [ipyasakla]
   ipmute:
+    description: Kullanıcıya IPSusturma atar.
+    aliases: [ipsustur]
+  autoreboot:
+    description: Sunucuyu yeniden başlatır.
+    aliases: [yenidenbaşlat]
+  autorebootcancel:
+    description: Sunucuyu yeniden başlatmayı iptal eder.
+    aliases: [yenidenbaşlatmaiptal]
+  alts:
+    description: Girilen oyuncunun alternatif hesaplarını bulur.
+    aliases: [alternatif, alt]
+  history:
+    description: Girilen oyuncunun geçmişine dair detayları gösterir.
+    aliases: [geçmiş]
+  reports:
+    description: Sunucudaki raporları veya oyuncunun raporlarını gösterir.
+    aliases: [raporlar, şikayetler]
+  list:
+  msg:
+    description: Oyuncuya özel mesaj gönderir.
+    aliases: [m]
+  stream:
+    description: Yayıncı moduna girer.
+    aliases: [yayın]
+  heal:
+    description: Sizi canlandırır.
+    aliases: [canlan]
+  follow:
+    description: Bir oyuncuyu takip eder.
+    aliases: [takip]
+  unfollow:
+    description: Bir oyuncuyu takibi bırakır.
+    aliases: [takipkaldır]
+  messagesounds:
+    description: Özel mesajlar için sesleri açar.
+    aliases: [mesajsesleri, özelmesajses]
+  messagesvisible:
+    description: Özel mesajları kapatır.
+    aliases: [dmtoggle]
+  socialspy:
+    description: Casus moduna girer.
+    aliases: [casusmodu]
+  inspector:

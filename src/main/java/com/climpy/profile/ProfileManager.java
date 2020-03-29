@@ -1,9 +1,9 @@
 package com.climpy.profile;
 
-import com.climpy.RedrockMongoAPI;
 import com.climpy.RedrockPlugin;
 import com.climpy.mongo.CollectionManager;
 import com.climpy.mongo.MongoConnection;
+import com.climpy.mongo.RedrockMongoAPI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
@@ -31,9 +31,11 @@ public class ProfileManager {
         return this.getPlayerProfile(offlinePlayer.getUniqueId());
     }
 
+
     private Profile getPlayerProfile(UUID uniqueUUID) {
         return this.getPlayerProfile(uniqueUUID, null);
     }
+
     public Profile getProfile(UUID uniqueUUID) {
         return this.getPlayerProfile(uniqueUUID);
     }

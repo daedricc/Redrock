@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class UnBlacklistCommand  implements CommandExecutor {
+public class UnBlacklistCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -26,7 +26,7 @@ public class UnBlacklistCommand  implements CommandExecutor {
         if (!(sender instanceof ConsoleCommandSender)) {
             Profile profile = profileManager.getProfile(sender.getName());
             if (!profile.getRankType().isAboveOrEqual(RankType.MOD)) {
-                sender.sendMessage(ChatColor.RED + "Geçersiz izin parametresi.");
+                sender.sendMessage(Locale.format(Locale.NO_PERM));
                 return true;
             }
         }

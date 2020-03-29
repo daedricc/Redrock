@@ -10,13 +10,12 @@ import com.climpy.punishments.PunishmentManager;
 import com.climpy.punishments.PunishmentType;
 import com.climpy.punishments.extnds.Blacklist;
 import com.climpy.utils.MiscUtils;
-
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.Command;
-import org.bukkit.ChatColor;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
@@ -30,7 +29,7 @@ public class BlacklistCommand implements CommandExecutor {
         if (!(sender instanceof ConsoleCommandSender)) {
             Profile profile = profileManager.getProfile(sender.getName());
             if (!profile.getRankType().isAboveOrEqual(RankType.MOD)) {
-                sender.sendMessage(ChatColor.RED + "Geçersiz izin parametresi.");
+                sender.sendMessage(Locale.format(Locale.NO_PERM));
                 return true;
             }
         }

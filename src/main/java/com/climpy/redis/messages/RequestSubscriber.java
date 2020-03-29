@@ -1,6 +1,5 @@
-package com.elice.bedrock.redis.messages.extnds;
+package com.climpy.redis.messages;
 
-import com.climpy.RedrockPlugin;
 import com.climpy.RedrockPlugin;
 import com.climpy.profile.Profile;
 import com.climpy.profile.rank.RankType;

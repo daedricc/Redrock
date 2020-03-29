@@ -30,7 +30,7 @@ public class Kick extends Punishment {
         Profile staffProfile = RedrockPlugin.getInstance().getProfileManager().getProfile(active ? this.addedBy : this.removedBy);
         Profile targetProfile = RedrockPlugin.getInstance().getProfileManager().getProfile(this.uniqueUUID);
 
-        if(active) {
+        if (active) {
             message.append(targetProfile.getRankType().getColor()).append(targetProfile.getName()).append(ChatColor.GREEN).append(" adlı oyuncu sunucudan atıldı, by ").
                     append(staffProfile.getRankType().getColor()).append(staffProfile.getName());
         }

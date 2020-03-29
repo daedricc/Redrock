@@ -6,11 +6,35 @@ import org.apache.commons.lang.time.DurationFormatUtils;
 
 import java.text.DecimalFormat;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TimeUtils {
 
+    public static int parseTime(final String time) {
+        if (time.equals("0") || time.equals("")) {
+            return 0;
+        }
+        final String[] lifeMatch = {"w", "d", "h", "m", "s"};
+        final int[] lifeInterval = {604800, 86400, 3600, 60, 1};
+        int seconds = -1;
+        for (int i = 0; i < lifeMatch.length; ++i) {
+            final Matcher matcher = Pattern.compile("([0-9]+)" + lifeMatch[i]).matcher(time);
+            while (matcher.find()) {
+                if (seconds == -1) {
+                    seconds = 0;
+                }
+                seconds += Integer.parseInt(matcher.group(1)) * lifeInterval[i];
+            }
+        }
+        if (seconds == -1) {
+            throw new IllegalArgumentException("GECERSIZ ZAMAN DENEMESI.");
+        }
+        return seconds;
+    }
+
     public static String getDurationBreakdown(long milliseconds) {
-        if(milliseconds < 0) {
+        if (milliseconds < 0) {
             throw new IllegalArgumentException("Süre değeri sıfırdan büyük olmalıdır!");
         }
 
@@ -127,13 +151,16 @@ public class TimeUtils {
             if (tmp.length() != duration.length()) {
                 duration = tmp;
 
-                tmp = StringUtils.replaceOnce(tmp, " 0d", "").replace(" 0 dakika", "");;
+                tmp = StringUtils.replaceOnce(tmp, " 0d", "").replace(" 0 dakika", "");
+                ;
                 if (tmp.length() != duration.length()) {
                     duration = tmp;
 
-                    tmp = StringUtils.replaceOnce(tmp, " 0s", "").replace(" 0 saat", "");;
+                    tmp = StringUtils.replaceOnce(tmp, " 0s", "").replace(" 0 saat", "");
+                    ;
                     if (tmp.length() != duration.length()) {
-                        duration = StringUtils.replaceOnce(tmp, " 0g", "").replace(" 0 gün", "");;
+                        duration = StringUtils.replaceOnce(tmp, " 0g", "").replace(" 0 gün", "");
+                        ;
                     }
                 }
             }

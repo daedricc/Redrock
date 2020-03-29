@@ -21,7 +21,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.net.InetAddress;
-import java.util.UUID;
 import java.util.logging.Level;
 
 public class ProfileListener implements Listener {
@@ -62,17 +61,29 @@ public class ProfileListener implements Listener {
             profile.setLastLoginTime(System.currentTimeMillis());
 
             PunishmentManager punishmentManager = RedrockPlugin.getInstance().getPunishmentManager();
-            Punishment punishment = punishmentManager.getPunishment(profile.getUniqueUUID(), PunishmentType.IP_BAN, PunishmentType.BAN, PunishmentType.BLACKLIST);
-            if (punishment != null) {
-                event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_BANNED);
-                event.setKickMessage(punishment.getPunishmentMessage().toString());
-            }
+            for (Profile targetProfile : RedrockPlugin.getInstance().getProfileManager().getDatabaseIPProfile(profile.getCurrentAddress())) {
+                if (!targetProfile.getUniqueUUID().equals(profile.getUniqueUUID())) {
+                    if (!targetProfile.getAlts().contains(profile.getUniqueUUID())) {
+                        targetProfile.getAlts().add(profile.getUniqueUUID());
+                        targetProfile.saveProfile();
+                    }
 
-            for (Profile altProfile : profileManager.getDatabaseIPProfile(ipAddress)) {
-                Punishment altPunishment = punishmentManager.getPunishment(altProfile.getUniqueUUID(), PunishmentType.IP_BAN, PunishmentType.BLACKLIST);
-                if (altPunishment != null) {
+                    if (!profile.getAlts().contains(targetProfile.getUniqueUUID())) {
+                        profile.getAlts().add(targetProfile.getUniqueUUID());
+                        profile.saveProfile();
+                    }
+                }
+
+                Punishment punishment;
+                if (targetProfile.getUniqueUUID().equals(profile.getUniqueUUID())) {
+                    punishment = punishmentManager.getPunishment(targetProfile.getUniqueUUID(), PunishmentType.IP_BAN, PunishmentType.BAN, PunishmentType.BLACKLIST);
+                } else {
+                    punishment = punishmentManager.getPunishment(targetProfile.getUniqueUUID(), PunishmentType.IP_BAN, PunishmentType.BLACKLIST);
+                }
+
+                if (punishment != null) {
+                    event.setKickMessage(punishment.getPunishmentMessage().toString());
                     event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_BANNED);
-                    event.setKickMessage(altPunishment.getPunishmentMessage().toString());
                 }
             }
         } catch (Exception e) {
@@ -136,7 +147,7 @@ public class ProfileListener implements Listener {
         Player player = event.getPlayer();
         Profile profile = RedrockPlugin.getInstance().getProfileManager().getProfile(player.getUniqueId());
 
-        if(profile == null) {
+        if (profile == null) {
             return;
         }
 

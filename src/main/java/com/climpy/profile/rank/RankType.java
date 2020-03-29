@@ -9,19 +9,19 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 
-@Getter @AllArgsConstructor
+@Getter
+@AllArgsConstructor
 public enum RankType {
     OWNER("§4Owner §c", "", "owner", "§4Owner", ChatColor.DARK_RED, Arrays.asList("worldedit.*", "fawe.admin")),
     CO_OWNER("§4Co-Owner §c", "", "co_owner", "§4Co-Owner", ChatColor.DARK_RED, Arrays.asList("worldedit.*", "fawe.admin")),
     ADMIN("§4Admin §c", "", "admin", "§4Admin", ChatColor.DARK_RED, Arrays.asList("worldedit.*", "fawe.admin")),
     DEVELOPER("§9Developer §b", "", "developer", "§9Developer", ChatColor.BLUE, Arrays.asList("worldedit.*", "fawe.admin")),
-    BUILDTEAMPLUS("§eMimar§c+ §6", "", "buildteamplus", "§eMimar+", ChatColor.YELLOW, Arrays.asList("worldedit.*", "fawe.admin")),
     BUILDTEAM("§eMimar §6", "", "buildteam", "§eMimar", ChatColor.YELLOW, Arrays.asList("worldedit.*", "fawe.admin")),
-    MODPLUS("§5Mod§b+ §d", "", "modplus", "§5Mod+", ChatColor.DARK_PURPLE, Arrays.asList("worldedit.*", "fawe.admin")),
+    MODPLUS("§5Mod+ §d", "", "modplus", "§5Mod+", ChatColor.DARK_PURPLE, Arrays.asList("worldedit.*", "fawe.admin")),
     MOD("§dMod §5", "", "mod", "§dMod", ChatColor.LIGHT_PURPLE, Arrays.asList("worldedit.*", "fawe.admin", "fawe.admin")),
     CHAT_MOD("§dChat Mod §e", "", "chat_mod", "§dChat Mod", ChatColor.YELLOW, Arrays.asList("worldedit.*", "fawe.admin")),
     HELPER("§3Yardımcı §3", "", "helper", "§3Yardımcı", ChatColor.BLUE, Collections.emptyList()),
-    YOUTUBER("§cYoutuber §e", "", "youtuber", "§dYoutuber", ChatColor.YELLOW, Collections.emptyList()),
+    FAMOUS("§bFamous §9", "", "famous", "§bFamous", ChatColor.AQUA, Collections.emptyList()),
     CVIPPLUSPLUS("§eCVIP§c++ §6", "", "cvipplusplus", "§eCVIP§c++", ChatColor.YELLOW, Collections.emptyList()),
     CVIPPLUS("§eCVIP§c+ §6", "", "cvipplus", "§eCVIP§c+", ChatColor.YELLOW, Collections.emptyList()),
     CVIP("§eCVIP §6", "", "cvip", "§eCVIP", ChatColor.YELLOW, Collections.emptyList()),
@@ -49,11 +49,6 @@ public enum RankType {
         }
 
         return rankType;
-    }
-
-    public static String separatorCheck(StringBuilder stringBuilder) {
-        String STRING_SEPARATOR = "\n";
-        return separatorCheck(stringBuilder, "\n");
     }
 
     public static String separatorCheck(StringBuilder stringBuilder, String STRING_SEPARATOR) {

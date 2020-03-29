@@ -3,6 +3,9 @@ package com.climpy.profile.rank.commands;
 import com.climpy.RedrockPlugin;
 import com.climpy.profile.Profile;
 import com.climpy.profile.rank.RankType;
+import com.climpy.profile.redis.RedisPlayerAction;
+import com.climpy.profile.redis.RedisPlayerCache;
+import com.climpy.profile.redis.RedisPlayerData;
 import com.climpy.redis.data.DataPublisher;
 import com.climpy.redis.messages.MessageSubscriber;
 import com.climpy.utils.C;
@@ -53,7 +56,7 @@ public class SetRankCommand implements CommandExecutor, TabExecutor {
             sender.sendMessage(" ");
             List<String> permissions = user.getRankType().getPlayerAllPermissions(player);
             sender.sendMessage(ChatColor.GRAY + "Yetkiler " + ChatColor.RESET + "(" + permissions.size() + ")");
-            if(!permissions.isEmpty()) {
+            if (!permissions.isEmpty()) {
                 sender.sendMessage(permissions.toString());
             }
             sender.sendMessage(C.CHAT_BAR);
@@ -97,18 +100,21 @@ public class SetRankCommand implements CommandExecutor, TabExecutor {
             user.saveProfile();
         }
 
-       /* if (targetUser.isOnlineStatus()) {
+        RedisPlayerCache redisPlayerCache = RedrockPlugin.getInstance().getRedisPlayerCache();
+        RedisPlayerData redisPlayerData = redisPlayerCache.getRedisPlayerData(targetUser.getUniqueUUID());
+
+        if (redisPlayerData.getRedisPlayerAction() == RedisPlayerAction.JOINING_SERVER) {
             DataPublisher dataPublisher = RedrockPlugin.getInstance().getRedisConnection().getDataPublisher();
             JsonObject messageObject = new JsonObject();
             MessageSubscriber.MessageType messageType = MessageSubscriber.MessageType.PLAYER;
             messageObject.addProperty("type", messageType.getInternalName());
             messageObject.addProperty("message", ChatColor.GRAY + "[Network] " + ChatColor.GREEN + "Rütbeniz " + rankType.getColor() + rankType.getDisplayName() + ChatColor.GREEN + "'a " + (
-                    previousRank.isAboveOrEqual(RankType.getRankOrDefault(rankType.getRankName())) ? "düşürüldü.": "yükseltildi") + ".");
+                    previousRank.isAboveOrEqual(RankType.getRankOrDefault(rankType.getRankName())) ? "düşürüldü." : "yükseltildi") + ".");
             messageObject.addProperty("value", targetUser.getUniqueUUID().toString());
             dataPublisher.write("message", messageObject);
             targetUser.saveProfile();
             user.saveProfile();
-        } */
+        }
 
         targetUser.saveProfile();
         user.saveProfile();

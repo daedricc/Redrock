@@ -15,13 +15,13 @@ public class PingUtil {
                 getHandleMethod = player.getClass().getDeclaredMethod("getHandle");
                 getHandleMethod.setAccessible(true);
             }
-            
-			Object entityPlayer = getHandleMethod.invoke(player);
+
+            Object entityPlayer = getHandleMethod.invoke(player);
             if (pingField == null) {
                 pingField = entityPlayer.getClass().getDeclaredField("ping");
                 pingField.setAccessible(true);
             }
-			
+
             int ping = pingField.getInt(entityPlayer);
             return ping > 0 ? ping : 0;
         } catch (Exception ex) {

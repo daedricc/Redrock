@@ -12,11 +12,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-import java.util.Objects;
+import java.util.List;
 
 public class PunishmentListener implements Listener {
-    @EventHandler(ignoreCancelled = true, priority =  EventPriority.MONITOR)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onPunishmentApplyEvent(PunishmentApplyEvent event) {
+        List<Punishment> punishments = event.getAltPunishments();
         Punishment punishment = event.getPunishment();
 
         boolean announce = event.isAnnounce();
@@ -27,7 +28,6 @@ public class PunishmentListener implements Listener {
         if (announce) {
             for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                 Profile profile = profileManager.getProfile(onlinePlayer.getUniqueId());
-
                 if (silent && !profile.getRankType().isAboveOrEqual(RankType.CHAT_MOD)) {
                     continue;
                 }
@@ -36,8 +36,7 @@ public class PunishmentListener implements Listener {
             }
         }
 
-        event.getAltPunishments().add(punishment);
-        for (Punishment altPunishment : event.getAltPunishments()) {
+        for (Punishment altPunishment : punishments) {
             Player targetPlayer = Bukkit.getPlayer(altPunishment.getUniqueUUID());
 
             if (altPunishment.isActive() && targetPlayer != null) {
@@ -49,10 +48,10 @@ public class PunishmentListener implements Listener {
                     });
                 }
             }
-            Profile profile = profileManager.getProfile(altPunishment.getUniqueUUID());
 
+            Profile profile = profileManager.getProfile(altPunishment.getUniqueUUID());
             profile.getPunishments().removeIf(other -> other.getPunishmentID().equals(altPunishment.getPunishmentID()));
-            profile.getPunishments().add(punishment);
+            profile.getPunishments().add(altPunishment);
 
             profile.saveProfile();
         }

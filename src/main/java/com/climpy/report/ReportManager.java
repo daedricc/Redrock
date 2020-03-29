@@ -1,6 +1,6 @@
 package com.climpy.report;
 
-import com.climpy.RedrockMongoAPI;
+import com.climpy.mongo.RedrockMongoAPI;
 import com.mongodb.client.MongoCursor;
 import lombok.Getter;
 import org.bson.Document;

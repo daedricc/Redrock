@@ -19,7 +19,7 @@ public class MongoConnection {
 
     public void setupDatabaseConnection() {
         try {
-            this.credential = MongoCredential.createCredential("climpy","admin", "root".toCharArray());
+            this.credential = MongoCredential.createCredential("climpy", "admin", "root".toCharArray());
             this.mongoClient = new MongoClient(new ServerAddress("localhost", 27017), Collections.singletonList(this.credential));
 
             this.collectionManager = new CollectionManager(this.mongoClient);

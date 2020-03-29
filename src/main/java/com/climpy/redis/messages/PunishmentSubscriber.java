@@ -30,6 +30,7 @@ public class PunishmentSubscriber extends DataSubscriber {
         boolean silent = paramJsonObject.get("silent").getAsBoolean();
 
         List<Punishment> punishments = new ArrayList<>();
+        punishments.add(punishment);
 
         if (punishment.isActive() && (punishment.getPunishmentType() == PunishmentType.IP_MUTE || punishment.getPunishmentType() == PunishmentType.IP_BAN || punishment.getPunishmentType() == PunishmentType.BLACKLIST)) {
             final ProfileManager profileManager = RedrockPlugin.getInstance().getProfileManager();
@@ -37,10 +38,7 @@ public class PunishmentSubscriber extends DataSubscriber {
 
             targetProfile.getAlts().forEach(uniqueUUID -> {
                 Punishment altPunishment = punishmentManager.jsonPunishment(paramJsonObject.get("punishment").getAsJsonObject());
-
-                altPunishment.setPunishmentID(MiscUtils.generatePunishmentRandomID());
                 altPunishment.setUniqueUUID(uniqueUUID);
-
                 punishments.add(altPunishment);
             });
         }

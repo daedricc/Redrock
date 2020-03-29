@@ -1,6 +1,6 @@
 package com.climpy.server.commands;
 
-import com.climpy.RedrockPlugin;
+import com.climpy.Locale;
 import com.climpy.RedrockPlugin;
 import com.climpy.profile.Profile;
 import com.climpy.profile.rank.RankType;
@@ -9,7 +9,6 @@ import com.climpy.server.ServerData;
 import com.climpy.server.ServerState;
 import com.climpy.server.provider.CustomServerProvider;
 import com.climpy.server.provider.DefaultServerProvider;
-import com.climpy.utils.C;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -24,39 +23,40 @@ public class ServerChangeCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Profile user = RedrockPlugin.getInstance().getProfileManager().getProfile(sender.getName());
         if (!user.getRankType().isAboveOrEqual(RankType.CHAT_MOD)) {
-            sender.sendMessage(C.RED + "Bu işlem için " + RankType.CHAT_MOD.getColor() + RankType.CHAT_MOD.getDisplayName() + C.RED + " ve üzeri yetki gereklidir.");
+            sender.sendMessage(Locale.format(Locale.NO_PERM));
             return true;
         }
 
-            RedisManager redisManager = RedrockPlugin.getInstance().getRedisManager();
-            DefaultServerProvider defaultServerProvider = new DefaultServerProvider();
-            String currentlyServerName = defaultServerProvider.getServerName();
-            if (args.length < 1) {
-                sender.sendMessage(ChatColor.BLUE + "Şu anda bağlı olduğunuz sunucu: " + ChatColor.WHITE + currentlyServerName);
-                sender.sendMessage(ChatColor.RED + "Sunucu değiştirme kullanımı: " + ChatColor.WHITE +  "/" + label + " <sunucuAdı>");
-                        sender.sendMessage(ChatColor.AQUA + "Geçerli sunucular: " + ChatColor.WHITE + redisManager.getServerList());
-                return true;
-            }
-            ServerData serverData = redisManager.getServerByName((args.length == 2) ? args[1] : args[0]);
-            if (serverData == null) {
-                sender.sendMessage(ChatColor.RED + "Girilen isimde bir sunucu bulunamıyor.");
-                return true;
-            }
-            CustomServerProvider customServerProvider = new CustomServerProvider(serverData.getServerName());
-            ServerState serverState = ServerState.INACTIVE;
-            if (customServerProvider.getServerState() == serverState) {
-                sender.sendMessage(ChatColor.RED + "Girilen sunucu anda " + serverState.getDisplayName() + " durumdada.");
-                return true;
-            }
-            String serverName = customServerProvider.getServerName();
-            if (currentlyServerName.equals(serverName)) {
-                sender.sendMessage(ChatColor.RED + "Zaten anda " + ChatColor.WHITE + serverName + ChatColor.RED + " sunucusuna bağlısın.");
-                return true;
-            }
-            redisManager.sendRedisServer(user.getUniqueUUID(), serverData);
-            sender.sendMessage(ChatColor.GOLD + "Gönderiliyor: " + ChatColor.WHITE + serverName + ChatColor.GOLD + "..");
+        RedisManager redisManager = RedrockPlugin.getInstance().getRedisManager();
+        DefaultServerProvider defaultServerProvider = new DefaultServerProvider();
+        String currentlyServerName = defaultServerProvider.getServerName();
+        if (args.length < 1) {
+            sender.sendMessage(ChatColor.BLUE + "Şu anda bağlı olduğunuz sunucu: " + ChatColor.WHITE + currentlyServerName);
+            sender.sendMessage(ChatColor.RED + "Sunucu değiştirme kullanımı: " + ChatColor.WHITE + "/" + label + " <sunucuAdı>");
+            sender.sendMessage(ChatColor.AQUA + "Geçerli sunucular: " + ChatColor.WHITE + redisManager.getServerList());
             return true;
         }
+        ServerData serverData = redisManager.getServerByName((args.length == 2) ? args[1] : args[0]);
+        if (serverData == null) {
+            sender.sendMessage(ChatColor.RED + "Girilen isimde bir sunucu bulunamıyor.");
+            return true;
+        }
+        CustomServerProvider customServerProvider = new CustomServerProvider(serverData.getServerName());
+        ServerState serverState = ServerState.INACTIVE;
+        if (customServerProvider.getServerState() == serverState) {
+            sender.sendMessage(ChatColor.RED + "Girilen sunucu anda " + serverState.getDisplayName() + " durumdada.");
+            return true;
+        }
+        String serverName = customServerProvider.getServerName();
+        if (currentlyServerName.equals(serverName)) {
+            sender.sendMessage(ChatColor.RED + "Zaten anda " + ChatColor.WHITE + serverName + ChatColor.RED + " sunucusuna bağlısın.");
+            return true;
+        }
+
+        redisManager.sendRedisServer(user.getUniqueUUID(), serverData);
+        sender.sendMessage(ChatColor.GOLD + "Gönderiliyor: " + ChatColor.WHITE + serverName + ChatColor.GOLD + "..");
+        return true;
+    }
 
     public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length == 2) {

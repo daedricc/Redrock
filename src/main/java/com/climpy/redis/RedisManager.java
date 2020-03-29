@@ -74,7 +74,7 @@ public class RedisManager {
     public String getServersWithState(ServerType serverType) {
         if (this.servers.isEmpty())
             return "Sunucu bulunamadı.";
-        List<ServerData> customServer = (List<ServerData>)this.servers.values().stream().filter(serverData -> (serverData.getServerType() == serverType)).collect(Collectors.toList());
+        List<ServerData> customServer = (List<ServerData>) this.servers.values().stream().filter(serverData -> (serverData.getServerType() == serverType)).collect(Collectors.toList());
         return getServerBuilder(customServer);
     }
 
@@ -109,9 +109,9 @@ public class RedisManager {
     }
 
     public ServerData getSuitableServer(ServerType serverType) {
-        List<ServerData> lobbies = (List<ServerData>)this.servers.values().stream().filter(serverData -> (serverData.getServerType() == serverType)).filter(serverData -> (serverData.getServerState() == ServerState.ACTIVE)).collect(Collectors.toList());
+        List<ServerData> lobbies = (List<ServerData>) this.servers.values().stream().filter(serverData -> (serverData.getServerType() == serverType)).filter(serverData -> (serverData.getServerState() == ServerState.ACTIVE)).collect(Collectors.toList());
         DefaultServerProvider defaultServerProvider = new DefaultServerProvider();
-        if (lobbies.isEmpty() || (lobbies.size() == 1 && defaultServerProvider.getServerName().equals(((ServerData)lobbies.get(0)).getServerName())))
+        if (lobbies.isEmpty() || (lobbies.size() == 1 && defaultServerProvider.getServerName().equals(((ServerData) lobbies.get(0)).getServerName())))
             return null;
         Comparator<ServerData> serverDataComparator = Comparator.comparingInt(ServerData::getOnlinePlayers);
         lobbies.sort(serverDataComparator);

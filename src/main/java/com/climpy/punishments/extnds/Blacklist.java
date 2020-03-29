@@ -25,7 +25,7 @@ public class Blacklist extends Punishment {
         Profile staffProfile = RedrockPlugin.getInstance().getProfileManager().getProfile(active ? this.addedBy : this.removedBy);
         Profile targetProfile = RedrockPlugin.getInstance().getProfileManager().getProfile(this.uniqueUUID);
 
-        if(active) {
+        if (active) {
             message.append(targetProfile.getRankType().getColor()).append(targetProfile.getName()).append(ChatColor.GREEN).append(" adlı oyuncu karalisteye alındı, by ").
                     append(staffProfile.getRankType().getColor()).append(staffProfile.getName());
         } else {
@@ -39,7 +39,7 @@ public class Blacklist extends Punishment {
     @Override
     public StringBuilder getPunishmentMessage() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(ChatColor.RED).append("Bu hesap ağ üzerinde karalisteye alındı.").append("\n").append("\n");
+        stringBuilder.append(ChatColor.RED).append("Hesabınız ağ üzerinde karalisteye alındı.").append("\n").append("\n");
         stringBuilder.append(ChatColor.RED).append("Bu tür cezalarda geri bildirim kabul edilemez.").append("\n");
         return stringBuilder;
     }

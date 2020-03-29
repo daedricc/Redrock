@@ -55,7 +55,7 @@ public class InventoryManager {
                 .filter(opener -> opener.supports(type))
                 .findAny();
 
-        if(!opInv.isPresent()) {
+        if (!opInv.isPresent()) {
             opInv = this.defaultOpeners.stream()
                     .filter(opener -> opener.supports(type))
                     .findAny();
@@ -72,7 +72,7 @@ public class InventoryManager {
         List<Player> list = new ArrayList<>();
 
         this.inventories.forEach((player, playerInv) -> {
-            if(inv.equals(playerInv))
+            if (inv.equals(playerInv))
                 list.add(player);
         });
 
@@ -84,7 +84,7 @@ public class InventoryManager {
     }
 
     protected void setInventory(Player p, SmartInventory inv) {
-        if(inv == null)
+        if (inv == null)
             this.inventories.remove(p);
         else
             this.inventories.put(p, inv);
@@ -95,7 +95,7 @@ public class InventoryManager {
     }
 
     protected void setContents(Player p, InventoryContents contents) {
-        if(contents == null)
+        if (contents == null)
             this.contents.remove(p);
         else
             this.contents.put(p, contents);
@@ -108,10 +108,10 @@ public class InventoryManager {
         public void onInventoryClick(InventoryClickEvent e) {
             Player p = (Player) e.getWhoClicked();
 
-            if(!inventories.containsKey(p))
+            if (!inventories.containsKey(p))
                 return;
 
-            if(e.getAction() == InventoryAction.COLLECT_TO_CURSOR ||
+            if (e.getAction() == InventoryAction.COLLECT_TO_CURSOR ||
                     e.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY ||
                     e.getAction() == InventoryAction.NOTHING) {
 
@@ -119,18 +119,18 @@ public class InventoryManager {
                 return;
             }
 
-            if(e.getInventory() == p.getOpenInventory().getTopInventory()) {
+            if (e.getInventory() == p.getOpenInventory().getTopInventory()) {
                 e.setCancelled(true);
 
                 int row = e.getSlot() / 9;
                 int column = e.getSlot() % 9;
 
-                if(row < 0 || column < 0)
+                if (row < 0 || column < 0)
                     return;
 
                 SmartInventory inv = inventories.get(p);
 
-                if(row >= inv.getRows() || column >= inv.getColumns())
+                if (row >= inv.getRows() || column >= inv.getColumns())
                     return;
 
                 inv.getListeners().stream()
@@ -147,13 +147,13 @@ public class InventoryManager {
         public void onInventoryDrag(InventoryDragEvent e) {
             Player p = (Player) e.getWhoClicked();
 
-            if(!inventories.containsKey(p))
+            if (!inventories.containsKey(p))
                 return;
 
             SmartInventory inv = inventories.get(p);
 
-            for(int slot : e.getRawSlots()) {
-                if(slot >= p.getOpenInventory().getTopInventory().getSize())
+            for (int slot : e.getRawSlots()) {
+                if (slot >= p.getOpenInventory().getTopInventory().getSize())
                     continue;
 
                 e.setCancelled(true);
@@ -169,7 +169,7 @@ public class InventoryManager {
         public void onInventoryOpen(InventoryOpenEvent e) {
             Player p = (Player) e.getPlayer();
 
-            if(!inventories.containsKey(p))
+            if (!inventories.containsKey(p))
                 return;
 
             SmartInventory inv = inventories.get(p);
@@ -183,7 +183,7 @@ public class InventoryManager {
         public void onInventoryClose(InventoryCloseEvent e) {
             Player p = (Player) e.getPlayer();
 
-            if(!inventories.containsKey(p))
+            if (!inventories.containsKey(p))
                 return;
 
             SmartInventory inv = inventories.get(p);
@@ -192,13 +192,12 @@ public class InventoryManager {
                     .filter(listener -> listener.getType() == InventoryCloseEvent.class)
                     .forEach(listener -> ((InventoryListener<InventoryCloseEvent>) listener).accept(e));
 
-            if(inv.isCloseable()) {
+            if (inv.isCloseable()) {
                 e.getInventory().clear();
 
                 inventories.remove(p);
                 contents.remove(p);
-            }
-            else
+            } else
                 Bukkit.getScheduler().runTask(plugin, () -> p.openInventory(e.getInventory()));
         }
 
@@ -206,7 +205,7 @@ public class InventoryManager {
         public void onPlayerQuit(PlayerQuitEvent e) {
             Player p = e.getPlayer();
 
-            if(!inventories.containsKey(p))
+            if (!inventories.containsKey(p))
                 return;
 
             SmartInventory inv = inventories.get(p);

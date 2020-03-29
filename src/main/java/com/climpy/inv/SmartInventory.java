@@ -4,6 +4,7 @@ import com.climpy.RedrockPlugin;
 import com.climpy.inv.content.InventoryContents;
 import com.climpy.inv.content.InventoryProvider;
 import com.climpy.inv.opener.InventoryOpener;
+import com.climpy.utils.C;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -33,7 +34,10 @@ public class SmartInventory {
         this.manager = manager;
     }
 
-    public Inventory open(Player player) { return open(player, 0); }
+    public Inventory open(Player player) {
+        return open(player, 0);
+    }
+
     public Inventory open(Player player, int page) {
         Optional<SmartInventory> oldInv = this.manager.getInventory(player);
 
@@ -74,23 +78,53 @@ public class SmartInventory {
         this.manager.setContents(player, null);
     }
 
-    public String getId() { return id; }
-    public String getTitle() { return title; }
-    public InventoryType getType() { return type; }
-    public int getRows() { return rows; }
-    public int getColumns() { return columns; }
+    public String getId() {
+        return id;
+    }
 
-    public boolean isCloseable() { return closeable; }
-    public void setCloseable(boolean closeable) { this.closeable = closeable; }
+    public String getTitle() {
+        return title;
+    }
 
-    public InventoryProvider getProvider() { return provider; }
-    public Optional<SmartInventory> getParent() { return Optional.ofNullable(parent); }
+    public InventoryType getType() {
+        return type;
+    }
 
-    public InventoryManager getManager() { return manager; }
+    public int getRows() {
+        return rows;
+    }
 
-    List<InventoryListener<? extends Event>> getListeners() { return listeners; }
+    public int getColumns() {
+        return columns;
+    }
 
-    public static Builder builder() { return new Builder(); }
+    public boolean isCloseable() {
+        return closeable;
+    }
+
+    public void setCloseable(boolean closeable) {
+        this.closeable = closeable;
+    }
+
+    public InventoryProvider getProvider() {
+        return provider;
+    }
+
+    public Optional<SmartInventory> getParent() {
+        return Optional.ofNullable(parent);
+    }
+
+    public InventoryManager getManager() {
+        return manager;
+    }
+
+    List<InventoryListener<? extends Event>> getListeners() {
+        return listeners;
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
 
     public static final class Builder {
 
@@ -106,7 +140,8 @@ public class SmartInventory {
 
         private List<InventoryListener<? extends Event>> listeners = new ArrayList<>();
 
-        private Builder() {}
+        private Builder() {
+        }
 
         public Builder id(String id) {
             this.id = id;
@@ -114,7 +149,7 @@ public class SmartInventory {
         }
 
         public Builder title(String title) {
-            this.title = title;
+            this.title = C.translate(title);
             return this;
         }
 
@@ -155,12 +190,12 @@ public class SmartInventory {
         }
 
         public SmartInventory build() {
-            if(this.provider == null)
+            if (this.provider == null)
                 throw new IllegalStateException("The provider of the SmartInventory.Builder must be set.");
 
             InventoryManager manager = this.manager != null ? this.manager : RedrockPlugin.manager();
 
-            if(manager == null)
+            if (manager == null)
                 throw new IllegalStateException("The manager of the SmartInventory.Builder must be set, "
                         + "or the SmartInvs should be loaded as a plugin.");
 

@@ -7,7 +7,8 @@ import lombok.Getter;
 
 import java.util.UUID;
 
-@Getter @Data
+@Getter
+@Data
 public class RedisPlayerData {
     private final UUID uniqueUUID;
     private final String name;

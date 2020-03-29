@@ -6,27 +6,27 @@ import com.climpy.server.ServerType;
 import java.net.InetSocketAddress;
 
 public interface IServerProvider {
-  String getServerName();
-  
-  int getServerID();
-  
-  boolean getServerWhitelist();
+    String getServerName();
 
-  InetSocketAddress getServerIP();
-  
-  int getPlayerCount();
-  
-  int getMaxPlayerCount();
-  
-  ServerState getServerState();
-  
-  ServerType getServerType();
-  
-  long getServerStartTime();
-  
-  long getServerLastUpdateTime();
+    int getServerID();
 
-  long getServerRebootTime();
+    boolean getServerWhitelist();
 
-  double getServerTPSStatus();
+    InetSocketAddress getServerIP();
+
+    int getPlayerCount();
+
+    int getMaxPlayerCount();
+
+    ServerState getServerState();
+
+    ServerType getServerType();
+
+    long getServerStartTime();
+
+    long getServerLastUpdateTime();
+
+    long getServerRebootTime();
+
+    double getServerTPSStatus();
 }

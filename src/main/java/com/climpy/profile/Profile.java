@@ -1,7 +1,7 @@
 package com.climpy.profile;
 
-import com.climpy.RedrockMongoAPI;
 import com.climpy.RedrockPlugin;
+import com.climpy.mongo.RedrockMongoAPI;
 import com.climpy.profile.rank.RankType;
 import com.climpy.profile.symbol.SymbolType;
 import com.climpy.punishments.Punishment;
@@ -38,18 +38,26 @@ public class Profile {
     private List<String> ipAddresses = new ArrayList<>();
 
     private boolean staffMode = false, staffChat = false, vanishStatus = false, frozenStatus = false, messagesVisible = true, messagingSounds = true,
-            socialSpy = false, staffChatVisible = true, globalChatVisible = true, loaded = false;
+            socialSpy = false, staffChatVisible = true, loaded = false;
 
     private long credit, lastLoginTime;
     private Long firstLoginTime;
 
-    private List<UUID> ignores = new ArrayList<>();
-    private List<Punishment> punishments = new ArrayList<>();
     private List<UUID> alts = new ArrayList<>();
+    private List<UUID> ignores = new ArrayList<>();
+
+    private List<Punishment> punishments = new ArrayList<>();
+
+    private UUID lastRepliedPlayer;
+
+    private boolean scoreboardMinimized;
 
     public Profile(UUID uniqueUUID, String name) {
         this.uniqueUUID = uniqueUUID;
         this.name = name;
+
+        scoreboardMinimized = false;
+
         this.loadProfile(uniqueUUID);
     }
 
@@ -59,7 +67,7 @@ public class Profile {
 
     private void loadProfile(UUID uniqueUUID) {
         Document documentUUID = RedrockMongoAPI.find("user", Filters.eq("uniqueUUID", uniqueUUID.toString()));
-        if(documentUUID == null) {
+        if (documentUUID == null) {
             this.saveProfile();
             this.loaded = true;
             return;
@@ -72,7 +80,8 @@ public class Profile {
         this.uniqueUUID = UUID.fromString(document.getString("uniqueUUID"));
         this.name = document.getString("name");
 
-        this.ipAddresses = new Gson().fromJson(document.getString("ipAddresses"), new TypeToken<List<String>>() {}.getType());
+        this.ipAddresses = new Gson().fromJson(document.getString("ipAddresses"), new TypeToken<List<String>>() {
+        }.getType());
         this.currentAddress = document.getString("currentAddress");
 
         this.rankType = RankType.getRankOrDefault(document.getString("rankType"));
@@ -89,19 +98,27 @@ public class Profile {
 
         this.messagesVisible = document.getBoolean("messagesVisible", true);
         this.messagingSounds = document.getBoolean("messagingSounds", true);
+
         this.socialSpy = document.getBoolean("socialSpy", false);
 
-        this.globalChatVisible = document.getBoolean("globalChatVisible", true);
         this.staffChatVisible = document.getBoolean("staffChatVisible", true);
 
-        this.ignores = new Gson().fromJson(document.getString("ignores"), new TypeToken<List<UUID>>() {}.getType());
+        this.alts = new Gson().fromJson(document.getString("alts"), new TypeToken<List<UUID>>() {
+        }.getType());
+
+        this.ignores = new Gson().fromJson(document.getString("ignores"), new TypeToken<List<UUID>>() {
+        }.getType());
         PunishmentManager punishmentManager = RedrockPlugin.getInstance().getPunishmentManager();
         for (JsonElement punishment : new JsonParser().parse(document.getString("punishments")).getAsJsonArray()) {
             this.punishments.add(punishmentManager.jsonPunishment(punishment.getAsJsonObject()));
         }
 
+        this.lastRepliedPlayer = UUID.fromString(document.getString("lastRepliedPlayer"));
+
+        this.scoreboardMinimized = document.getBoolean("scoreboardMinimized");
+
         this.loaded = true;
-    }
+        }
 
     public void saveProfile() {
         Document document = new Document();
@@ -120,20 +137,29 @@ public class Profile {
         document.put("lastLoginTime", this.lastLoginTime);
 
         document.put("currentAddress", this.currentAddress);
-        document.put("ipAddresses", new Gson().toJson(this.ipAddresses, new TypeToken<List<String>>() {}.getType()));
+        document.put("ipAddresses", new Gson().toJson(this.ipAddresses, new TypeToken<List<String>>() {
+        }.getType()));
 
         document.put("messagesVisible", this.messagesVisible);
         document.put("messagingSounds", this.messagingSounds);
         document.put("socialSpy", this.socialSpy);
         document.put("staffChatVisible", this.staffChatVisible);
 
-        document.put("ignores", new Gson().toJson(this.ignores, new TypeToken<List<UUID>>() {}.getType()));
+        document.put("alts", new Gson().toJson(this.alts, new TypeToken<List<UUID>>() {
+        }.getType()));
+
+        document.put("ignores", new Gson().toJson(this.ignores, new TypeToken<List<UUID>>() {
+        }.getType()));
         JsonArray jsonPunishments = new JsonArray();
         for (Punishment punishment : this.punishments) {
             jsonPunishments.add(punishment.getJsonObject());
         }
 
         document.put("punishments", jsonPunishments.toString());
+
+        document.put("lastRepliedPlayer", this.lastRepliedPlayer.toString());
+
+        document.put("scoreboardMinimized", this.scoreboardMinimized);
 
         RedrockMongoAPI.replaceOne("user", Filters.eq("uniqueUUID", this.uniqueUUID.toString()), document, true);
     }

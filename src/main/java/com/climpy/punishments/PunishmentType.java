@@ -4,7 +4,8 @@ import com.climpy.punishments.extnds.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor @Getter
+@AllArgsConstructor
+@Getter
 public enum PunishmentType {
     BAN("Uzaklaştırma", "ban", Ban.class),
     IP_BAN("IP Uzaklaştırma", "ip_ban", Ban.class),
@@ -20,7 +21,7 @@ public enum PunishmentType {
 
     public static PunishmentType getPunishmentType(String internalName) {
         for (PunishmentType punishmentType : PunishmentType.values()) {
-            if(punishmentType.getInternalName().equals(internalName)) {
+            if (punishmentType.getInternalName().equals(internalName)) {
                 return punishmentType;
             }
         }

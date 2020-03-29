@@ -6,7 +6,8 @@ import org.bukkit.ChatColor;
 
 import java.net.InetSocketAddress;
 
-@Getter @Setter
+@Getter
+@Setter
 public class ServerData {
     private String serverName;
     private InetSocketAddress iP;

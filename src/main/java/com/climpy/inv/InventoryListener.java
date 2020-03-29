@@ -12,8 +12,12 @@ public class InventoryListener<T> {
         this.consumer = consumer;
     }
 
-    public void accept(T t) { consumer.accept(t); }
+    public void accept(T t) {
+        consumer.accept(t);
+    }
 
-    public Class<T> getType() { return type; }
+    public Class<T> getType() {
+        return type;
+    }
 
 }

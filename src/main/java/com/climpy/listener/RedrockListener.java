@@ -1,7 +1,6 @@
 package com.climpy.listener;
 
 import com.climpy.RedrockPlugin;
-import com.climpy.RedrockPlugin;
 import com.climpy.profile.Profile;
 import com.climpy.profile.rank.RankType;
 import com.climpy.redis.RedisConnection;
@@ -99,6 +98,6 @@ public class RedrockListener implements Listener {
             String kickReason = ChatColor.RED + "Sunucudan atıldınız: " + ChatColor.LIGHT_PURPLE + serverName + ChatColor.RED + ": " + ChatColor.YELLOW + event.getReason();
             redisManager.kickRedisServer(eventUser.getUniqueUUID(), serverData, kickReason);
 
-       }
+        }
     }
 }

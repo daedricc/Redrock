@@ -21,7 +21,7 @@ public class ListRankCommand implements CommandExecutor {
         Profile user = RedrockPlugin.getInstance().getProfileManager().getProfile(sender.getName());
         Player player = Bukkit.getPlayer(sender.getName());
         if (sender instanceof Player) {
-            if (!player.isOp() && !user.getRankType().isAboveOrEqual(RankType.ADMIN)) {
+            if (!user.getRankType().isAboveOrEqual(RankType.ADMIN)) {
                 sender.sendMessage(ChatColor.RED + "Bu komutu gerçekleştirmek için " + RankType.ADMIN.getDisplayName() + ChatColor.RED + " veya üzeri rütbe gerekiyor.");
                 return true;
             }
@@ -32,7 +32,7 @@ public class ListRankCommand implements CommandExecutor {
 
         ProfileManager profileManager = RedrockPlugin.getInstance().getProfileManager();
         for (RankType rankType : RankType.values()) {
-            List<Profile> rankUser = (List)profileManager.getProfiles().values().stream().filter(profile -> (user.getRankType() == rankType)).collect(Collectors.toList());
+            List<Profile> rankUser = (List) profileManager.getProfiles().values().stream().filter(profile -> (user.getRankType() == rankType)).collect(Collectors.toList());
             stringBuilder.append(ChatColor.GRAY + "- ").append(rankType.getPrefix()).append(rankType.getColor()).append(rankType.getDisplayName()).append(rankType.getSuffix()).append(ChatColor.GRAY).append(", ").append(rankUser.size()).append(" kişi(ler)");
             stringBuilder.append("\n");
         }

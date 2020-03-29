@@ -5,7 +5,8 @@ import lombok.Getter;
 
 import java.util.Locale;
 
-@AllArgsConstructor @Getter
+@AllArgsConstructor
+@Getter
 public enum RedisPlayerAction {
     LEAVING_SERVER("Sunucudan Ayrılıyor", "leaving_server"),
     JOINING_SERVER("Sunucuya Katılıyor", "joining_server");

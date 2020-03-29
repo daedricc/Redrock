@@ -31,7 +31,7 @@ public class Ban extends Punishment {
         Profile staffProfile = RedrockPlugin.getInstance().getProfileManager().getProfile(active ? this.addedBy : this.removedBy);
         Profile targetProfile = RedrockPlugin.getInstance().getProfileManager().getProfile(this.uniqueUUID);
 
-        if(active) {
+        if (active) {
             message.append(targetProfile.getRankType().getColor()).append(targetProfile.getName()).append(ChatColor.GREEN).append(" adlı oyuncu sunucudan uzaklaştırıldı, by ").
                     append(staffProfile.getRankType().getColor()).append(staffProfile.getName());
         } else {
@@ -45,9 +45,11 @@ public class Ban extends Punishment {
     @Override
     public StringBuilder getPunishmentMessage() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(ChatColor.RED).append("Sunucudan ").append(this.isPermanent() ? "süresiz olarak" : ChatColor.WHITE + TimeUtils.getDurationWords(this.duration - System.currentTimeMillis(), true, true)).append(ChatColor.RED).append(this.punishmentType == PunishmentType.IP_BAN ? " ip" : "").append(" uzaklaştırıldınız.").append("\n");
+        stringBuilder.append(ChatColor.RED).append("Sunucudan ").append(this.isPermanent() ? "süresiz olarak" : ChatColor.WHITE + TimeUtils.getDurationWords(this.duration - System.currentTimeMillis(), true, true)).append(ChatColor.RED).append(this.punishmentType == PunishmentType.IP_BAN ? " ip" : "").append(" uzaklaştırıldınız.").append("\n\n");
         stringBuilder.append(ChatColor.RED).append("Neden: ").append(ChatColor.WHITE).append(this.addedReason).append("\n");
-        stringBuilder.append(ChatColor.RED).append("Geri bildirim için, ").append(ChatColor.BOLD).append("moosy.net").append(ChatColor.RED).append(".");
+        stringBuilder.append(ChatColor.RED).append("ID: ").append(ChatColor.WHITE).append("#").append(this.punishmentID).append("\n\n");
+        stringBuilder.append(ChatColor.GRAY).append("Geri bildirim için @ ").append(ChatColor.BOLD).append("moosy.net").append(ChatColor.GRAY).append(".\n");
+        stringBuilder.append(ChatColor.GRAY).append("Ceza ID'nizi paylaşmak ceza süreci için etkileyici olacaktır.");
         return stringBuilder;
     }
 }

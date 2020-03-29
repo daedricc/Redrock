@@ -26,7 +26,7 @@ public class Warn extends Punishment {
         Profile staffProfile = RedrockPlugin.getInstance().getProfileManager().getProfile(active ? this.addedBy : this.removedBy);
         Profile targetProfile = RedrockPlugin.getInstance().getProfileManager().getProfile(this.uniqueUUID);
 
-        if(active) {
+        if (active) {
             message.append(targetProfile.getRankType().getColor()).append(targetProfile.getName()).append(ChatColor.GREEN).append(" adlı oyuncu uyarıldı, by ").
                     append(staffProfile.getRankType().getColor()).append(staffProfile.getName());
         }
@@ -44,7 +44,7 @@ public class Warn extends Punishment {
         stringBuilder.append(ChatColor.GREEN).append(ChatColor.BOLD).append("Uyarıldınız").append(ChatColor.GREEN).append("! ").append(warnCount).append(" adet uyarınız bulunmakta.").append("\n");
         stringBuilder.append(ChatColor.GREEN).append("Neden: ").append(ChatColor.WHITE).append(this.addedReason).append("\n");
 
-        if ((warnCount+1)%10 == 0) {
+        if ((warnCount + 1) % 10 == 0) {
             stringBuilder.append(ChatColor.AQUA).append(ChatColor.BOLD).append("Uyarı sayısı on ve onun katlarını geçtiğinde farklı sürelerde uzaklaştırma işlemleri hesabınız üzerine uygulanacaktır.");
         }
 

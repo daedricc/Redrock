@@ -32,7 +32,7 @@ public class StaffMenu implements InventoryProvider {
     @Override
     public void update(Player player, InventoryContents contents) {
         Profile user = RedrockPlugin.getInstance().getProfileManager().getProfile(player.getUniqueId());
-      //  contents.fillBorders(ClickableItem.empty(new ItemBuilder(Material.STAINED_GLASS_PANE).durability(15).name("&6._.").lore("&7.-.").build()));
+        //  contents.fillBorders(ClickableItem.empty(new ItemBuilder(Material.STAINED_GLASS_PANE).durability(15).name("&6._.").lore("&7.-.").build()));
 
         contents.set(1, 4, ClickableItem.of(ItemUtils.createSkullItem("&a&lYönetici Profili", (short) 3, player.getName(), Arrays.asList
                 ("&fBilgileriniz aşağıda sıralandı.",
@@ -40,31 +40,29 @@ public class StaffMenu implements InventoryProvider {
                         "&7Yetki: " + user.getRankType().getDisplayName(),
                         "&7Staff Sohbeti: " + (user.isStaffChat() ? "&aAçık" : "&4Kapalı"),
                         "&7Staff Modu: " + (user.isStaffMode() ? "&aAçık" : "&4Kapalı"),
-                "&7Staff Sohbeti Görünürlüğü: " + (user.isStaffChatVisible() ? "&aAçık" : "&4Kapalı"))), e -> {
+                        "&7Staff Sohbeti Görünürlüğü: " + (user.isStaffChatVisible() ? "&aAçık" : "&4Kapalı"))), e -> {
         }));
 
         contents.set(3, 2, ClickableItem.of(new ItemBuilder(Material.NAME_TAG).name("&6&lStaff Sohbeti").lore(
-                    new String[] {"&bMevcut Durum: " + (user.isStaffChat() ? "&aAçık" : "&cKapalı"), "", "&7" + (user.isStaffChat() ? "Kapatmak" : "Açmak") + " için tıkla."}).build(), e -> {
+                new String[]{"&bMevcut Durum: " + (user.isStaffChat() ? "&aAçık" : "&cKapalı"), "", "&7" + (user.isStaffChat() ? "Kapatmak" : "Açmak") + " için tıkla."}).build(), e -> {
             user.setStaffChat(!user.isStaffChat());
             player.sendMessage(C.translate("&6Staff Sohbeti: " + (user.isStaffChat() ? "&aAçık" : "&cKapalı")));
             user.saveProfile();
         }));
 
         contents.set(3, 4, ClickableItem.of(new ItemBuilder(Material.DIAMOND_AXE).name("&6&lStaff Modu").lore(
-                new String[] {"&bMevcut Durum: " + (user.isStaffMode() ? "&aAçık" : "&cKapalı"), "", "&7" + (user.isStaffMode() ? "Kapatmak" : "Açmak") + " için tıkla."}).build(), e -> {
+                new String[]{"&bMevcut Durum: " + (user.isStaffMode() ? "&aAçık" : "&cKapalı"), "", "&7" + (user.isStaffMode() ? "Kapatmak" : "Açmak") + " için tıkla."}).build(), e -> {
             user.setStaffMode(!user.isStaffMode());
             player.sendMessage(C.translate("&6Staff Modu: " + (user.isStaffMode() ? "&aAçık" : "&cKapalı")));
             user.saveProfile();
         }));
 
         contents.set(3, 6, ClickableItem.of(new ItemBuilder(Material.ENDER_PEARL).name("&6&lStaff Sohbeti Görünürlüğü").lore(
-                new String[] {"&bMevcut Durum: " + (user.isStaffChatVisible() ? "&aAçık" : "&cKapalı"), "", "&7" + (user.isStaffChatVisible() ? "Kapatmak" : "Açmak") + " için tıkla."}).build(), e -> {
+                new String[]{"&bMevcut Durum: " + (user.isStaffChatVisible() ? "&aAçık" : "&cKapalı"), "", "&7" + (user.isStaffChatVisible() ? "Kapatmak" : "Açmak") + " için tıkla."}).build(), e -> {
             user.setStaffChatVisible(!user.isStaffChatVisible());
             player.sendMessage(C.translate("&6Staff Sohbeti Görünürlüğü: " + (user.isStaffChatVisible() ? "&aAçık" : "&cKapalı")));
             user.saveProfile();
         }));
-
-
 
 
     }

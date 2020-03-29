@@ -1,5 +1,6 @@
 package com.climpy.punishments.args;
 
+import com.climpy.Locale;
 import com.climpy.RedrockPlugin;
 import com.climpy.profile.Profile;
 import com.climpy.profile.rank.RankType;
@@ -15,15 +16,18 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 
 public class BanCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         Profile profile = RedrockPlugin.getInstance().getProfileManager().getProfile(sender.getName());
-        if (!profile.getRankType().isAboveOrEqual(RankType.MODPLUS)) {
-            sender.sendMessage(ChatColor.RED + "Geçersiz izin parametresi yazmaya üşenmişsin bende..");
-            return true;
+        if (!(sender instanceof ConsoleCommandSender)) {
+            if (!profile.getRankType().isAboveOrEqual(RankType.MOD)) {
+                sender.sendMessage(Locale.format(Locale.NO_PERM));
+                return true;
+            }
         }
 
         if (args.length < 1) {
@@ -46,7 +50,7 @@ public class BanCommand implements CommandExecutor {
 
         long duration = DateTimeUtils.parseLong(silent ? args.length <= 2 ? "0" : args[2] : args.length <= 1 ? "0" : args[1]);
         String reason = MiscUtils.joinStrings(args, silent ? duration == 0 ? 2 : 3 : duration == 0 ? 1 : 2);
-        if (reason.isEmpty()) reason = "Haksız Avantaj";
+        if (reason.isEmpty()) reason = "[MoosyAC] Haksız Avantaj";
 
         PunishmentManager punishmentManager = RedrockPlugin.getInstance().getPunishmentManager();
         Punishment punishment = punishmentManager.getPunishment(targetProfile.getUniqueUUID(), PunishmentType.BAN, PunishmentType.IP_BAN, PunishmentType.BLACKLIST);

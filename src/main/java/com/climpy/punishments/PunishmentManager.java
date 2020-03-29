@@ -3,12 +3,9 @@ package com.climpy.punishments;
 import com.climpy.RedrockPlugin;
 import com.climpy.profile.Profile;
 import com.climpy.profile.ProfileManager;
-import com.climpy.profile.rank.RankType;
 import com.climpy.redis.RedisConnection;
 import com.climpy.redis.data.DataPublisher;
 import com.google.gson.JsonObject;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;

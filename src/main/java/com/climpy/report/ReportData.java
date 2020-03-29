@@ -1,6 +1,6 @@
 package com.climpy.report;
 
-import com.climpy.RedrockMongoAPI;
+import com.climpy.mongo.RedrockMongoAPI;
 import com.climpy.utils.MiscUtils;
 import com.mongodb.client.model.Filters;
 import lombok.Data;
@@ -10,7 +10,9 @@ import org.bson.Document;
 
 import java.util.UUID;
 
-@Getter @Setter @Data
+@Getter
+@Setter
+@Data
 public class ReportData {
 
     private String reportID;

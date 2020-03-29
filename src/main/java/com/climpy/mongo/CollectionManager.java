@@ -14,7 +14,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
 
-@Getter @Setter
+@Getter
+@Setter
 public class CollectionManager {
     private Set<String> collections;
     private MongoClient mongoClient;
@@ -36,7 +37,7 @@ public class CollectionManager {
                 MongoDatabase mongoDatabase = this.mongoClient.getDatabase("redrock");
 
                 String[] names = new String[this.collections.size()];
-                for (int index = 0; index < names.length;) {
+                for (int index = 0; index < names.length; ) {
                     for (String collection : this.collections) {
                         RedrockPlugin.getInstance().getLogger().log(Level.INFO, "[MongoDB] [" + (index + 1) + "] - " + collection + " collections sisteme işleniyor.");
                         names[index++] = collection;
@@ -67,7 +68,7 @@ public class CollectionManager {
             }
 
         } catch (Exception ex) {
-           RedrockPlugin.getInstance().getLogger().log(Level.SEVERE, "[MongoDB] Collection hatası, 5 saniye içinde kurtarılmaya çalışılıyor.");
+            RedrockPlugin.getInstance().getLogger().log(Level.SEVERE, "[MongoDB] Collection hatası, 5 saniye içinde kurtarılmaya çalışılıyor.");
             Bukkit.getScheduler().runTaskLater(RedrockPlugin.getInstance(), this::createDataConnection, 5 * 20L);
         }
     }
