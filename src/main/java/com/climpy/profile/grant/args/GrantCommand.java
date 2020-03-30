@@ -62,16 +62,12 @@ public class GrantCommand extends RedrockCommand {
         profile.getGrants().add(grant);
         profile.activateNextGrant();
 
-       // NightPlugin.getPlugin().getDatabaseManager().getRedisImpl().getRedis().sendPacket((Packet)new PacketAddGrant(profile.getUuid(), grant));
-
         DataPublisher dataPublisher = RedrockPlugin.getInstance().getRedisConnection().getDataPublisher();
         JsonObject streamObject = new JsonObject();
         streamObject.addProperty("uuid", profile.getUniqueUUID().toString());
         dataPublisher.write("add_grant", streamObject);
 
-       // ChatUtil.sendMessage(commandsender, new String[] { "&eYou applied a &r" + rank.getColoredName() + "&e grant to &r" + profile.getColoredUsername() });
         sender.sendMessage("" + rank.getColoredName() + " yetkisini " + profile.getName() + " adlı oyuncuya verdin.");
-
         Player player = profile.toPlayer();
         if (player != null) {
             Bukkit.getPluginManager().callEvent(new GrantAppliedEvent(player, grant));

@@ -51,16 +51,13 @@ public class Profile {
     private boolean scoreboardMinimized;
 
     private Grant activeGrant;
-    private List<Grant> grants;
+    private List<Grant> grants = new ArrayList<>();
 
     public Profile(UUID uniqueUUID, String name) {
         this.uniqueUUID = uniqueUUID;
         this.name = name;
 
-        this.grants = new ArrayList<>();
-
         this.lastRepliedPlayer = uniqueUUID;
-
         scoreboardMinimized = false;
 
         this.loadProfile(uniqueUUID);
@@ -98,7 +95,6 @@ public class Profile {
         }
 
         if (this.activeGrant == null) {
-            System.out.println("evet gerçekten buradayım");
             activateNextGrant();
             if (this.activeGrant != null)
                 return;

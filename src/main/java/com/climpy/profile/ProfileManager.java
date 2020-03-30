@@ -24,7 +24,7 @@ import java.util.*;
 @Getter
 public class ProfileManager {
     private RedrockPlugin plugin;
-    public static Map<UUID, Profile> profiles;
+    public Map<UUID, Profile> profiles;
     private PluginManager pluginManager;
 
     public ProfileManager() {
