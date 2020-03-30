@@ -8,11 +8,9 @@ import com.climpy.inv.content.InventoryProvider;
 import com.climpy.inv.content.SlotPos;
 import com.climpy.profile.Profile;
 import com.climpy.profile.ProfileManager;
-import com.climpy.profile.rank.RankType;
 import com.climpy.profile.redis.RedisPlayerAction;
 import com.climpy.profile.redis.RedisPlayerCache;
 import com.climpy.profile.redis.RedisPlayerData;
-import com.climpy.punishments.history.menu.HistoryCategoryMenu;
 import com.climpy.redis.RedisManager;
 import com.climpy.server.ServerData;
 import com.climpy.utils.ItemUtils;
@@ -45,7 +43,7 @@ public class OnlineStaffMenu implements InventoryProvider {
         RedisManager redisManager = RedrockPlugin.getInstance().getRedisManager();
 
         List<Profile> profiles = profileManager.getDatabaseProfiles().stream().filter(profile -> {
-            return profile.getRankType().isAboveOrEqual(RankType.MOD);
+            return profile.toPlayer().hasPermission("redrock.mod");
         }).collect(Collectors.toList());
 
         List<Profile> targetProfiles = profiles.stream().filter(profile -> {
@@ -58,7 +56,7 @@ public class OnlineStaffMenu implements InventoryProvider {
             Profile targetProfile = targetProfiles.get(i);
 
             RedisPlayerData targetPlayerRedisData = redisPlayerCache.getRedisPlayerData(targetProfile.getUniqueUUID());
-            contents.set(SlotPos.of(0, i), ClickableItem.of(ItemUtils.createSkullItem(targetProfile.getRankType().getColor() + targetProfile.getName(), (short) 3, targetProfile.getName(), Arrays.asList(
+            contents.set(SlotPos.of(0, i), ClickableItem.of(ItemUtils.createSkullItem(targetProfile.getActiveRank().getColor() + targetProfile.getName(), (short) 3, targetProfile.getName(), Arrays.asList(
                     "§7Sunucu: §f" + targetPlayerRedisData.getLastSeenServer(),
                     "§7Staff Modu: " + (targetProfile.isStaffMode() ? "§aAçık" : "§cKapalı"),
                     "§7Görünmezlik: " + (targetProfile.isVanishStatus() ? "§aAçık" : "§cKapalı"),

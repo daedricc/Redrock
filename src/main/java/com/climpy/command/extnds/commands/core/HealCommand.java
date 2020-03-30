@@ -1,0 +1,76 @@
+package com.climpy.command.extnds.commands.core;
+
+import com.climpy.Locale;
+import com.climpy.RedrockPlugin;
+import com.climpy.profile.Profile;
+import com.climpy.server.ServerType;
+import com.climpy.server.provider.DefaultServerProvider;
+import com.climpy.utils.C;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+
+public class HealCommand implements CommandExecutor {
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+        Profile user = RedrockPlugin.getInstance().getProfileManager().getProfile(sender.getName());
+        Player p = Bukkit.getPlayer(sender.getName());
+        DefaultServerProvider defaultServerProvider = new DefaultServerProvider();
+
+        if (defaultServerProvider.getServerType() == ServerType.LOBI) {
+            sender.sendMessage(C.RED + "Lobi sunucularında bu komutu kullanamazsınız.");
+            return true;
+        }
+
+        if (sender instanceof Player && !p.isOp() && !user.toPlayer().hasPermission("redrock.vip")) {
+            sender.sendMessage(Locale.format(Locale.NO_PERM));
+            return true;
+        }
+
+        if (cmd.getName().equalsIgnoreCase("heal")) {
+
+            if (args.length == 0) {
+                if (!(sender instanceof Player)) {
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cKonsol bunu kullanamaz."));
+                    return true;
+                }
+
+                p.sendMessage("§aKendinizi iyileştirdiniz.");
+                p.setHealth(20);
+                p.setFireTicks(0);
+                for (PotionEffect po : p.getActivePotionEffects()) {
+                    p.removePotionEffect(po.getType());
+                }
+                p.setFoodLevel(20);
+                p.setSaturation(10);
+                return true;
+            }
+            if (args.length > 1) {
+                sender.sendMessage("§bDoğru Kullanım: §6/heal [oyuncu]");
+                return true;
+            }
+            Player t = Bukkit.getPlayer(args[0]);
+            if (t == null) {
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cOyuncu bulunamadı."));
+                return true;
+            }
+            sender.sendMessage(user.getActiveRank().getColor() + t.getName() + " §aiyileştirildi.");
+            t.sendMessage(user.getActiveRank().getColor() + sender.getName() + " §aadlı yönetici tarafından iyileştirildiniz.");
+            t.setHealth(20);
+            t.setFireTicks(0);
+            for (PotionEffect to : t.getActivePotionEffects()) {
+                t.removePotionEffect(to.getType());
+            }
+            t.setFoodLevel(20);
+            t.setSaturation(10);
+            return true;
+        }
+        return true;
+    }
+
+}

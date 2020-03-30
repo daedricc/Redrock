@@ -3,7 +3,6 @@ package com.climpy.report.menu.commands;
 import com.climpy.Locale;
 import com.climpy.RedrockPlugin;
 import com.climpy.profile.Profile;
-import com.climpy.profile.rank.RankType;
 import com.climpy.report.ReportData;
 import com.climpy.report.ReportManager;
 import com.climpy.report.menu.ReportProfileMenu;
@@ -22,7 +21,7 @@ public class ReportsCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command label, String s, String[] args) {
         Player player = Bukkit.getPlayer(sender.getName());
         Profile profile = RedrockPlugin.getInstance().getProfileManager().getProfile(sender.getName());
-        if (!profile.getRankType().isAboveOrEqual(RankType.MOD)) {
+        if(!profile.toPlayer().hasPermission("redrock.moderator")) {
             sender.sendMessage(Locale.format(Locale.NO_PERM));
             return true;
         }

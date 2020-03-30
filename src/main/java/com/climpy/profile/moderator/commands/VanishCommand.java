@@ -4,7 +4,6 @@ import com.climpy.Locale;
 import com.climpy.RedrockPlugin;
 import com.climpy.profile.Profile;
 import com.climpy.profile.moderator.VanishManager;
-import com.climpy.profile.rank.RankType;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -18,10 +17,10 @@ public class VanishCommand implements CommandExecutor {
         Player player = Bukkit.getPlayer(sender.getName());
         if (sender instanceof Player) {
             Profile profile = RedrockPlugin.getInstance().getProfileManager().getProfile(player.getUniqueId());
-            if (!profile.getRankType().isAboveOrEqual(RankType.MOD)) {
-                sender.sendMessage(Locale.format(Locale.NO_PERM));
-                return true;
-            }
+            if(!profile.toPlayer().hasPermission("redrock.moderator")) {
+            sender.sendMessage(Locale.format(Locale.NO_PERM));
+            return true;
+        }
 
             VanishManager vanishManager = RedrockPlugin.getInstance().getVanishManager();
 

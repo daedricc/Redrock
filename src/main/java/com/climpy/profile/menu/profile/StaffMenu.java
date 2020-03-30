@@ -8,7 +8,7 @@ import com.climpy.inv.content.InventoryProvider;
 import com.climpy.profile.Profile;
 import com.climpy.utils.C;
 import com.climpy.utils.ItemUtils;
-import com.climpy.utils.menu.ItemBuilder;
+import com.climpy.utils.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -37,7 +37,7 @@ public class StaffMenu implements InventoryProvider {
         contents.set(1, 4, ClickableItem.of(ItemUtils.createSkullItem("&a&lYönetici Profili", (short) 3, player.getName(), Arrays.asList
                 ("&fBilgileriniz aşağıda sıralandı.",
                         "",
-                        "&7Yetki: " + user.getRankType().getDisplayName(),
+                        "&7Yetki: " + user.getActiveRank().getDisplayName(),
                         "&7Staff Sohbeti: " + (user.isStaffChat() ? "&aAçık" : "&4Kapalı"),
                         "&7Staff Modu: " + (user.isStaffMode() ? "&aAçık" : "&4Kapalı"),
                         "&7Staff Sohbeti Görünürlüğü: " + (user.isStaffChatVisible() ? "&aAçık" : "&4Kapalı"))), e -> {

@@ -32,11 +32,11 @@ public class Ban extends Punishment {
         Profile targetProfile = RedrockPlugin.getInstance().getProfileManager().getProfile(this.uniqueUUID);
 
         if (active) {
-            message.append(targetProfile.getRankType().getColor()).append(targetProfile.getName()).append(ChatColor.GREEN).append(" adlı oyuncu sunucudan uzaklaştırıldı, by ").
-                    append(staffProfile.getRankType().getColor()).append(staffProfile.getName());
+            message.append(targetProfile.getActiveRank().getColor()).append(targetProfile.getName()).append(ChatColor.GREEN).append(" adlı oyuncu sunucudan uzaklaştırıldı, by ").
+                    append(staffProfile.getActiveRank().getColor()).append(staffProfile.getName());
         } else {
-            message.append(targetProfile.getRankType().getColor()).append(targetProfile.getName()).append(ChatColor.GREEN).append(" adlı oyuncunun yasağı açıldı, by ")
-                    .append(staffProfile.getRankType().getColor()).append(staffProfile.getName());
+            message.append(targetProfile.getActiveRank().getColor()).append(targetProfile.getName()).append(ChatColor.GREEN).append(" adlı oyuncunun yasağı açıldı, by ")
+                    .append(staffProfile.getActiveRank().getColor()).append(staffProfile.getName());
         }
 
         return message.toString();

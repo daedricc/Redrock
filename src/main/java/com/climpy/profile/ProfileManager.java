@@ -4,6 +4,9 @@ import com.climpy.RedrockPlugin;
 import com.climpy.mongo.CollectionManager;
 import com.climpy.mongo.MongoConnection;
 import com.climpy.mongo.RedrockMongoAPI;
+import com.climpy.profile.grant.listener.GrantListener;
+import com.climpy.profile.listener.ProfileListener;
+import com.climpy.profile.rank.Rank;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
@@ -11,12 +14,18 @@ import lombok.Getter;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
 @Getter
 public class ProfileManager {
-    public Map<UUID, Profile> profiles;
+    private RedrockPlugin plugin;
+    public static Map<UUID, Profile> profiles;
+    private PluginManager pluginManager;
 
     public ProfileManager() {
         this.profiles = new HashMap<>();

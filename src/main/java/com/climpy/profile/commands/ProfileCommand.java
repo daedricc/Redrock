@@ -4,7 +4,6 @@ import com.climpy.Locale;
 import com.climpy.RedrockPlugin;
 import com.climpy.profile.Profile;
 import com.climpy.profile.menu.profile.StaffMenu;
-import com.climpy.profile.rank.RankType;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -16,7 +15,7 @@ public class ProfileCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String s, String[] strings) {
         Player player = Bukkit.getPlayer(sender.getName());
         Profile user = RedrockPlugin.getInstance().getProfileManager().getProfile(player.getUniqueId());
-        if (!user.getRankType().isAboveOrEqual(RankType.CHAT_MOD)) {
+        if (!user.toPlayer().hasPermission("redrock.mod")) {
             sender.sendMessage(Locale.format(Locale.NO_PERM));
             return true;
         }

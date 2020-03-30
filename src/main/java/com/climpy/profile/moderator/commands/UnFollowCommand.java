@@ -4,7 +4,6 @@ import com.climpy.Locale;
 import com.climpy.RedrockPlugin;
 import com.climpy.profile.Profile;
 import com.climpy.profile.moderator.FollowManager;
-import com.climpy.profile.rank.RankType;
 import com.climpy.utils.C;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -21,10 +20,10 @@ public class UnFollowCommand implements CommandExecutor {
         Player player = Bukkit.getPlayer(sender.getName());
         if (sender instanceof Player) {
             Profile profile = RedrockPlugin.getInstance().getProfileManager().getProfile(player.getUniqueId());
-            if (!profile.getRankType().isAboveOrEqual(RankType.MOD)) {
-                sender.sendMessage(Locale.format(Locale.NO_PERM));
-                return true;
-            }
+            if(!profile.toPlayer().hasPermission("redrock.moderator")) {
+            sender.sendMessage(Locale.format(Locale.NO_PERM));
+            return true;
+        }
 
             FollowManager followManager = RedrockPlugin.getInstance().getFollowManager();
             UUID following = followManager.getFollowing(player.getUniqueId());

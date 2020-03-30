@@ -2,7 +2,6 @@ package com.climpy.tasks;
 
 import com.climpy.RedrockPlugin;
 import com.climpy.profile.Profile;
-import com.climpy.profile.rank.RankType;
 import com.climpy.redis.RedisManager;
 import com.climpy.server.ServerData;
 import com.climpy.server.ServerState;
@@ -37,7 +36,7 @@ public class ServerRemoveTask extends BukkitRunnable {
                 deletedServer.remove();
                 for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                     Profile onlineUser = RedrockPlugin.getInstance().getProfileManager().getProfile(onlinePlayer.getUniqueId());
-                    if (onlineUser.getRankType().isAboveOrEqual(RankType.CHAT_MOD)) {
+                    if (onlineUser.toPlayer().hasPermission("redrock.mod")) {
                         String stringBuilder = C.GRAY + "[Network] " + C.WHITE + "Kaldırılan sunucu, " + serverName + ".";
                         onlinePlayer.sendMessage(stringBuilder);
                     }

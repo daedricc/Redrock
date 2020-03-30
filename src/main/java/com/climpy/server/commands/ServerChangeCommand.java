@@ -3,7 +3,6 @@ package com.climpy.server.commands;
 import com.climpy.Locale;
 import com.climpy.RedrockPlugin;
 import com.climpy.profile.Profile;
-import com.climpy.profile.rank.RankType;
 import com.climpy.redis.RedisManager;
 import com.climpy.server.ServerData;
 import com.climpy.server.ServerState;
@@ -22,7 +21,7 @@ public class ServerChangeCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Profile user = RedrockPlugin.getInstance().getProfileManager().getProfile(sender.getName());
-        if (!user.getRankType().isAboveOrEqual(RankType.CHAT_MOD)) {
+        if (!user.toPlayer().hasPermission("redrock.mod")) {
             sender.sendMessage(Locale.format(Locale.NO_PERM));
             return true;
         }

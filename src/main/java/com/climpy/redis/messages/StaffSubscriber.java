@@ -2,7 +2,6 @@ package com.climpy.redis.messages;
 
 import com.climpy.RedrockPlugin;
 import com.climpy.profile.Profile;
-import com.climpy.profile.rank.RankType;
 import com.climpy.profile.symbol.SymbolType;
 import com.climpy.redis.data.DataSubscriber;
 import com.climpy.utils.fanciful.FancyMessage;
@@ -25,7 +24,7 @@ public class StaffSubscriber extends DataSubscriber {
         String serverName = object.get("serverName").getAsString();
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             Profile onlineUser = RedrockPlugin.getInstance().getProfileManager().getProfile(onlinePlayer.getUniqueId());
-            if (onlineUser.getRankType().isAboveOrEqual(RankType.CHAT_MOD))
+            if (onlineUser.toPlayer().hasPermission("redrock.mod"))
                 setMessageFormat(staffEventType, serverName, uuid).send(onlinePlayer);
         }
     }
@@ -38,7 +37,7 @@ public class StaffSubscriber extends DataSubscriber {
 
 
         SymbolType symbolType = eventUser.getSymbolType();
-        fancyMessage.tooltip(ChatColor.GRAY + "Rütbe: " + eventUser.getRankType().getColor() + eventUser.getRankType().getDisplayName() +
+        fancyMessage.tooltip(ChatColor.GRAY + "Rütbe: " + eventUser.getActiveRank().getColor() + eventUser.getActiveRank().getDisplayName() +
                "\n" + ChatColor.GRAY + "Sembol Türü: " + ((symbolType == SymbolType.SYMBOL_0) ? (ChatColor.GRAY + "Kullanılmıyor.") : (symbolType
          .getPrefix() + ChatColor.GRAY + " (" + symbolType.getDisplayName() + ")")));
         return fancyMessage;

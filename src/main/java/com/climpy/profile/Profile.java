@@ -2,14 +2,14 @@ package com.climpy.profile;
 
 import com.climpy.RedrockPlugin;
 import com.climpy.mongo.RedrockMongoAPI;
-import com.climpy.profile.rank.RankType;
+import com.climpy.profile.grant.Grant;
+import com.climpy.profile.grant.event.GrantAppliedEvent;
+import com.climpy.profile.grant.event.GrantExpireEvent;
+import com.climpy.profile.rank.Rank;
 import com.climpy.profile.symbol.SymbolType;
 import com.climpy.punishments.Punishment;
 import com.climpy.punishments.PunishmentManager;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.mongodb.client.model.Filters;
 import lombok.Data;
@@ -20,11 +20,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
+import java.util.*;
 
 @Data @Getter @Setter
 public class Profile {
@@ -32,7 +31,6 @@ public class Profile {
     private String name;
 
     private SymbolType symbolType = SymbolType.SYMBOL_0;
-    private RankType rankType = RankType.DEFAULT;
 
     private String currentAddress = "127.0.0.1";
     private List<String> ipAddresses = new ArrayList<>();
@@ -52,13 +50,65 @@ public class Profile {
 
     private boolean scoreboardMinimized;
 
+    private Grant activeGrant;
+    private List<Grant> grants;
+
     public Profile(UUID uniqueUUID, String name) {
         this.uniqueUUID = uniqueUUID;
         this.name = name;
 
+        this.grants = new ArrayList<>();
+
+        this.lastRepliedPlayer = uniqueUUID;
+
         scoreboardMinimized = false;
 
         this.loadProfile(uniqueUUID);
+    }
+
+    public void setActiveGrant(Grant grant) {
+        this.activeGrant = grant;
+        Player player = toPlayer();
+        if (player != null)
+            player.setDisplayName(String.valueOf(grant.getRank().getPrefix()) + ((this.name == null) ? player.getName() : getName()));
+    }
+
+    public void activateNextGrant() {
+        List<Grant> grants = new ArrayList<>(this.grants);
+        grants.sort(Comparator.comparingInt(grant -> grant.getRank().getWeight()));
+        for (Grant grant : grants) {
+            if (!grant.isRemoved() && !grant.hasExpired())
+                setActiveGrant(grant);
+        }
+    }
+
+    public void checkGrants() {
+        for (Grant grant : this.grants) {
+            if (!grant.isRemoved() && grant.hasExpired()) {
+                grant.setRemovedAt(System.currentTimeMillis());
+                grant.setRemovedReason("Grant expired");
+                grant.setRemoved(true);
+                if (this.activeGrant != null && this.activeGrant.equals(grant))
+                    this.activeGrant = null;
+                Player player = toPlayer();
+                if (player == null)
+                    continue;
+                Bukkit.getPluginManager().callEvent(new GrantExpireEvent(player, grant));
+            }
+        }
+
+        if (this.activeGrant == null) {
+            System.out.println("evet gerçekten buradayım");
+            activateNextGrant();
+            if (this.activeGrant != null)
+                return;
+            Grant grant = new Grant(UUID.randomUUID(), Rank.getDefaultRank(), null, System.currentTimeMillis(), "Default", 2147483647L);
+            this.grants.add(grant);
+            setActiveGrant(grant);
+            Player player = toPlayer();
+            if (player != null)
+                Bukkit.getPluginManager().callEvent(new GrantAppliedEvent(player, grant));
+        }
     }
 
     public Profile(Document document) {
@@ -84,7 +134,6 @@ public class Profile {
         }.getType());
         this.currentAddress = document.getString("currentAddress");
 
-        this.rankType = RankType.getRankOrDefault(document.getString("rankType"));
         this.symbolType = SymbolType.getSymbolOrDefault(document.getString("symbolType"));
 
         this.credit = document.getLong("credit");
@@ -108,6 +157,17 @@ public class Profile {
 
         this.ignores = new Gson().fromJson(document.getString("ignores"), new TypeToken<List<UUID>>() {
         }.getType());
+
+        JsonArray grantList = new JsonParser().parse(document.getString("grants")).getAsJsonArray();
+
+        for (JsonElement grantData : grantList) {
+            Grant grant = Grant.DESERIALIZER.deserialize(grantData.getAsJsonObject());
+
+            if (grant != null) {
+                this.grants.add(grant);
+            }
+        }
+
         PunishmentManager punishmentManager = RedrockPlugin.getInstance().getPunishmentManager();
         for (JsonElement punishment : new JsonParser().parse(document.getString("punishments")).getAsJsonArray()) {
             this.punishments.add(punishmentManager.jsonPunishment(punishment.getAsJsonObject()));
@@ -117,6 +177,8 @@ public class Profile {
 
         this.scoreboardMinimized = document.getBoolean("scoreboardMinimized");
 
+        activateNextGrant();
+        checkGrants();
         this.loaded = true;
         }
 
@@ -125,7 +187,7 @@ public class Profile {
         document.put("uniqueUUID", this.uniqueUUID.toString());
 
         document.put("name", this.name);
-        document.put("rankType", this.rankType.getRankName().toLowerCase(Locale.ENGLISH));
+
         document.put("symbolType", this.symbolType.getDisplayName().toLowerCase(Locale.ENGLISH));
         document.put("credit", this.credit);
         document.put("staffMode", this.staffMode);
@@ -150,6 +212,14 @@ public class Profile {
 
         document.put("ignores", new Gson().toJson(this.ignores, new TypeToken<List<UUID>>() {
         }.getType()));
+
+
+        JsonArray grants = new JsonArray();
+        for (Grant grant : this.grants)
+            grants.add((JsonElement)Grant.SERIALIZER.serialize(grant));
+
+        document.put("grants", grants.toString());
+
         JsonArray jsonPunishments = new JsonArray();
         for (Punishment punishment : this.punishments) {
             jsonPunishments.add(punishment.getJsonObject());
@@ -168,27 +238,16 @@ public class Profile {
         return Bukkit.getPlayer(this.uniqueUUID);
     }
 
-    public void setupBukkitPlayer(Player player) {
-        if (player == null) {
-            return;
-        }
-
-        for (PermissionAttachmentInfo permissionAttachmentInfo : player.getEffectivePermissions()) {
-            if (permissionAttachmentInfo.getAttachment() == null || permissionAttachmentInfo.getAttachment().getPlugin() == null ||
-                    !permissionAttachmentInfo.getAttachment().getPlugin().equals(RedrockPlugin.getInstance())) {
+    public void setupPermissionsAttachment(Player player) {
+        for (PermissionAttachmentInfo attachmentInfo : player.getEffectivePermissions()) {
+            if (attachmentInfo.getAttachment() == null)
                 continue;
-            }
-
-            permissionAttachmentInfo.getAttachment().getPermissions().forEach((permission, value) -> {
-                permissionAttachmentInfo.getAttachment().unsetPermission(permission);
-            });
+            attachmentInfo.getAttachment().getPermissions().forEach((permission, value) -> attachmentInfo.getAttachment().unsetPermission(permission));
         }
 
-        PermissionAttachment permissionAttachment = player.addAttachment(RedrockPlugin.getInstance());
-        for (String permission : this.rankType.getPermissions()) {
-            permissionAttachment.setPermission(permission, true);
-        }
-
+        PermissionAttachment attachment = player.addAttachment(RedrockPlugin.getInstance());
+        for (String perm : this.activeGrant.getRank().getAllPermissions())
+            attachment.setPermission(perm, true);
         player.recalculatePermissions();
     }
 
@@ -199,4 +258,17 @@ public class Profile {
     public void addIPAddress(String ipAddress) {
         this.ipAddresses.add(ipAddress);
     }
+
+    public Rank getActiveRank() {
+        return this.activeGrant.getRank();
+    }
+
+    public Grant getActiveGrant() {
+        return this.activeGrant;
+    }
+
+    public List<Grant> getGrants() {
+        return this.grants;
+    }
+
 }

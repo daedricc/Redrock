@@ -4,7 +4,6 @@ import com.climpy.Locale;
 import com.climpy.RedrockPlugin;
 import com.climpy.profile.Profile;
 import com.climpy.profile.ProfileManager;
-import com.climpy.profile.rank.RankType;
 import com.climpy.punishments.Punishment;
 import com.climpy.punishments.PunishmentManager;
 import com.climpy.punishments.PunishmentType;
@@ -29,10 +28,10 @@ public class MuteCommand implements CommandExecutor {
         ProfileManager profileManager = RedrockPlugin.getInstance().getProfileManager();
         if (!(sender instanceof ConsoleCommandSender)) {
             Profile profile = profileManager.getProfile(sender.getName());
-            if (!profile.getRankType().isAboveOrEqual(RankType.MOD)) {
-                sender.sendMessage(Locale.format(Locale.NO_PERM));
-                return true;
-            }
+            if(!profile.toPlayer().hasPermission("redrock.moderator")) {
+            sender.sendMessage(Locale.format(Locale.NO_PERM));
+            return true;
+        }
         }
 
         if (args.length < 1) {

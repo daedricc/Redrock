@@ -39,9 +39,9 @@ public class VanishManager {
                     continue;
                 }
 
-                if (onlineProfile.getRankType().isAboveOrEqual(profile.getRankType())) {
+              //TODO: Bak buraya:  if (onlineProfile.getActiveRank().isAboveOrEqual(profile.getActiveRank())) {
                     onlinePlayer.hidePlayer(profile.toPlayer());
-                }
+              //  }
             }
 
             profile.toPlayer().setMetadata("vanished", new FixedMetadataValue(RedrockPlugin.getInstance(), true));

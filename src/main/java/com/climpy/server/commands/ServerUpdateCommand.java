@@ -1,8 +1,8 @@
 package com.climpy.server.commands;
 
+import com.climpy.Locale;
 import com.climpy.RedrockPlugin;
 import com.climpy.profile.Profile;
-import com.climpy.profile.rank.RankType;
 import com.climpy.tasks.ServerDataTask;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -15,9 +15,8 @@ public class ServerUpdateCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         Profile user = RedrockPlugin.getInstance().getProfileManager().getProfile(sender.getName());
-        if (!user.getRankType().isAboveOrEqual(RankType.CO_OWNER)) {
-            sender.sendMessage(ChatColor.RED + "Bu için " + RankType.CO_OWNER.getColor() + RankType.CO_OWNER
-                    .getDisplayName() + ChatColor.RED + " üzeri gerekir.");
+        if (!user.toPlayer().hasPermission("redrock.mod")) {
+            sender.sendMessage(Locale.format(Locale.NO_PERM));
             return true;
         }
 

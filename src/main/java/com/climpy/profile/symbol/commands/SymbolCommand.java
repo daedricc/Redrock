@@ -1,11 +1,10 @@
 package com.climpy.profile.symbol.commands;
 
+import com.climpy.Locale;
 import com.climpy.RedrockPlugin;
 import com.climpy.profile.Profile;
-import com.climpy.profile.rank.RankType;
 import com.climpy.profile.symbol.SymbolMenu;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,8 +15,8 @@ public class SymbolCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         Profile user = RedrockPlugin.getInstance().getProfileManager().getProfile(sender.getName());
-        if (sender instanceof Player && !user.getRankType().isAboveOrEqual(RankType.VIP)) {
-            sender.sendMessage(ChatColor.RED + "Sembol menüsüne erişmek için " + RankType.VIP.getDisplayName() + ChatColor.RED + " veya üzeri rütbe gerekiyor.");
+        if (!user.toPlayer().hasPermission("redrock.vip")) {
+            sender.sendMessage(Locale.format(Locale.NO_PERM));
             return true;
         }
 

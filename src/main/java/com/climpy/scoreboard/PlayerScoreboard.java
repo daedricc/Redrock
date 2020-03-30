@@ -2,7 +2,6 @@ package com.climpy.scoreboard;
 
 import com.climpy.RedrockPlugin;
 import com.climpy.profile.Profile;
-import com.climpy.profile.rank.RankType;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -59,43 +58,10 @@ public final class PlayerScoreboard {
             objective = scoreboard.registerNewObjective("sidebar", "dummy");
         }
 
-        owner = this.getTeamOrCreate("001owner");
-        coowner = this.getTeamOrCreate("002coowner");
-        admin = this.getTeamOrCreate("003admin");
-        developer = this.getTeamOrCreate("004developer");
-        buildteam = this.getTeamOrCreate("006buildteam");
-        modplus = this.getTeamOrCreate("007modplus");
-        mod = this.getTeamOrCreate("008mod");
-        chatmod = this.getTeamOrCreate("009chatmod");
-        helper = this.getTeamOrCreate("010helper");
-        famous = this.getTeamOrCreate("011youtuber");
-        cvipplusplus = this.getTeamOrCreate("012cvipplusplus");
-        cvipplus = this.getTeamOrCreate("013cvipplus");
-        cvip = this.getTeamOrCreate("014cvip");
-        mvipplus = this.getTeamOrCreate("015mvipplus");
-        mvip = this.getTeamOrCreate("016mvip");
-        vipplus = this.getTeamOrCreate("017vipplus");
-        vip = this.getTeamOrCreate("018vip");
-        rankdefault = this.getTeamOrCreate("019member");
 
-        owner.setPrefix(RankType.OWNER.getPrefix());
-        coowner.setPrefix(RankType.CO_OWNER.getPrefix());
-        admin.setPrefix(RankType.ADMIN.getPrefix());
-        developer.setPrefix(RankType.DEVELOPER.getPrefix());
-        buildteam.setPrefix(RankType.BUILDTEAM.getPrefix());
-        modplus.setPrefix(RankType.MODPLUS.getPrefix());
-        mod.setPrefix(RankType.MOD.getPrefix());
-        chatmod.setPrefix(RankType.CHAT_MOD.getPrefix());
-        helper.setPrefix(RankType.HELPER.getPrefix());
-        famous.setPrefix(RankType.FAMOUS.getPrefix());
-        cvipplusplus.setPrefix(RankType.CVIPPLUSPLUS.getPrefix());
-        cvipplus.setPrefix(RankType.CVIPPLUS.getPrefix());
-        cvip.setPrefix(RankType.CVIP.getPrefix());
-        mvipplus.setPrefix(RankType.MVIPPLUS.getPrefix());
-        mvip.setPrefix(RankType.MVIP.getPrefix());
-        vipplus.setPrefix(RankType.VIPPLUS.getPrefix());
-        vip.setPrefix(RankType.VIP.getPrefix());
-        rankdefault.setPrefix(RankType.DEFAULT.getPrefix());
+//        rankdefault = this.getTeamOrCreate("019member");
+
+//        owner.setPrefix(RankType.OWNER.getPrefix());
 
 
         objective.setDisplayName(supplier.getScoreboardTitle());
@@ -104,46 +70,6 @@ public final class PlayerScoreboard {
 
     public void checkTabPrefix(Player p) {
         Profile user = RedrockPlugin.getInstance().getProfileManager().getProfile(p.getName());
-
-        if (user.getRankType() == RankType.OWNER) {
-            owner.addEntry(p.getName());
-        } else if (user.getRankType() == RankType.CO_OWNER) {
-            coowner.addEntry(p.getName());
-        } else if (user.getRankType() == RankType.ADMIN) {
-            admin.addEntry(p.getName());
-        } else if (user.getRankType() == RankType.DEVELOPER) {
-            developer.addEntry(p.getName());
-        } else if (user.getRankType() == RankType.BUILDTEAM) {
-            buildteam.addEntry(p.getName());
-        } else if (user.getRankType() == RankType.MODPLUS) {
-            modplus.addEntry(p.getName());
-        } else if (user.getRankType() == RankType.MOD) {
-            mod.addEntry(p.getName());
-        } else if (user.getRankType() == RankType.CHAT_MOD) {
-            chatmod.addEntry(p.getName());
-        } else if (user.getRankType() == RankType.HELPER) {
-            helper.addEntry(p.getName());
-        } else if (user.getRankType() == RankType.FAMOUS) {
-            famous.addEntry(p.getName());
-        } else if (user.getRankType() == RankType.CVIPPLUSPLUS) {
-            cvipplusplus.addEntry(p.getName());
-        } else if (user.getRankType() == RankType.CVIPPLUS) {
-            cvipplus.addEntry(p.getName());
-        } else if (user.getRankType() == RankType.CVIP) {
-            cvip.addEntry(p.getName());
-        } else if (user.getRankType() == RankType.MVIPPLUS) {
-            mvipplus.addEntry(p.getName());
-        } else if (user.getRankType() == RankType.MVIP) {
-            mvip.addEntry(p.getName());
-        } else if (user.getRankType() == RankType.VIPPLUS) {
-            vipplus.addEntry(p.getName());
-        } else if (user.getRankType() == RankType.VIP) {
-            vip.addEntry(p.getName());
-        } else if (user.getRankType() == RankType.DEFAULT) {
-            rankdefault.addEntry(p.getName());
-        } else {
-            rankdefault.addEntry(p.getName());
-        }
     }
 
 

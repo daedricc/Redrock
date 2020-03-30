@@ -1,8 +1,8 @@
 package com.climpy.profile.symbol.commands;
 
+import com.climpy.Locale;
 import com.climpy.RedrockPlugin;
 import com.climpy.profile.Profile;
-import com.climpy.profile.rank.RankType;
 import com.climpy.profile.symbol.SymbolType;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -11,8 +11,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Locale;
-
 public class SetSymbolCommand implements CommandExecutor {
 
     @Override
@@ -20,8 +18,8 @@ public class SetSymbolCommand implements CommandExecutor {
         Profile user = RedrockPlugin.getInstance().getProfileManager().getProfile(sender.getName());
         Player player = (Player) sender;
 
-        if (sender instanceof Player &&!user.getRankType().isAboveOrEqual(RankType.ADMIN)) {
-            sender.sendMessage(ChatColor.RED + "Bu komutu gerçekleştirmek için " + RankType.ADMIN.getDisplayName() + ChatColor.RED + " veya üzeri rütbe gerekiyor.");
+        if (sender instanceof Player &&!user.toPlayer().hasPermission("redrock.admin")) {
+            sender.sendMessage(Locale.format(Locale.NO_PERM));
             return true;
         }
 
@@ -40,7 +38,7 @@ public class SetSymbolCommand implements CommandExecutor {
         SymbolType symbolType;
 
         try {
-            symbolType = SymbolType.valueOf(args[1].toUpperCase(Locale.ENGLISH));
+            symbolType = SymbolType.valueOf(args[1].toUpperCase(java.util.Locale.ENGLISH));
         } catch (Exception e) {
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cGirilen &f" + args[1] + " &csembolü bulunamadı. "));
             return true;
@@ -49,7 +47,7 @@ public class SetSymbolCommand implements CommandExecutor {
         Player t = Bukkit.getPlayer(args[0]);
 
         targetUser.setSymbolType(symbolType);
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', user.getRankType().getColor() + t.getName() + " &aoyuncusunun sembolü &f" + symbolType.getDisplayName() + " &aolarak güncellendi."));
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', user.getActiveRank().getColor() + t.getName() + " &aoyuncusunun sembolü &f" + symbolType.getDisplayName() + " &aolarak güncellendi."));
         t.sendMessage(ChatColor.translateAlternateColorCodes('&', "&aSembolünüz &f" + symbolType.getDisplayName() + " &aolarak güncellendi."));
         targetUser.saveProfile();
         return true;

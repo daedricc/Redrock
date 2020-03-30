@@ -3,7 +3,6 @@ package com.climpy.profile.moderator.items.extnds;
 import com.climpy.RedrockPlugin;
 import com.climpy.profile.Profile;
 import com.climpy.profile.ProfileManager;
-import com.climpy.profile.moderator.StaffManager;
 import com.climpy.profile.moderator.items.StaffModeItem;
 import com.climpy.utils.C;
 import com.climpy.utils.ItemUtils;
@@ -53,7 +52,7 @@ public class RandomTeleporterItem extends StaffModeItem {
             Player randomPlayer = players.get(random.nextInt(players.size()));
             Profile randomPlayerProfile = profileManager.getProfile(randomPlayer.getUniqueId());
             player.teleport(randomPlayer);
-            player.sendMessage(randomPlayerProfile.getRankType().getColor() + randomPlayer.getName() + C.GREEN + " adlı oyuncuya ışınlandınız.");
+            player.sendMessage(randomPlayerProfile.getActiveRank().getColor() + randomPlayer.getName() + C.GREEN + " adlı oyuncuya ışınlandınız.");
         }
     }
 }

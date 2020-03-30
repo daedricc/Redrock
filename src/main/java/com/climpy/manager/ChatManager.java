@@ -2,12 +2,10 @@ package com.climpy.manager;
 
 import com.climpy.RedrockPlugin;
 import com.climpy.profile.Profile;
-import com.climpy.profile.rank.RankType;
+import com.climpy.profile.rank.Rank;
 import com.climpy.utils.C;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.MapMaker;
-import gnu.trove.map.TObjectLongMap;
-import gnu.trove.map.hash.TObjectLongHashMap;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -15,7 +13,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,23 +45,23 @@ public class ChatManager {
         Player senderPlayer = Bukkit.getPlayer(sendingUser.getUniqueUUID());
         Player recipientPlayer = Bukkit.getPlayer(recipientUser.getUniqueUUID());
         if (!recipientUser.isMessagesVisible()) {
-            senderPlayer.sendMessage(recipientUser.getRankType().getColor() + recipientUser.getName() + C.RED + " özel mesajları engelliyor.");
+            senderPlayer.sendMessage(recipientUser.getActiveRank().getColor() + recipientUser.getName() + C.RED + " özel mesajları engelliyor.");
             return;
         }
 
-        RankType sendingRank = sendingUser.getRankType();
-        RankType recipientRank = recipientUser.getRankType();
+        Rank sendingRank = sendingUser.getActiveRank();
+        Rank recipientRank = recipientUser.getActiveRank();
 
-        senderPlayer.sendMessage(getPrivateMessageTemplate(true, getDisplayNameTemplate(sendingUser, sendingRank), getDisplayNameTemplate(recipientUser, recipientRank), privateMessage));
-        recipientPlayer.sendMessage(getPrivateMessageTemplate(false, getDisplayNameTemplate(sendingUser, sendingRank), getDisplayNameTemplate(recipientUser, recipientRank), privateMessage));
+        senderPlayer.sendMessage(getPrivateMessageTemplate(true, getDisplayNameTemplate(sendingUser), getDisplayNameTemplate(recipientUser), privateMessage));
+        recipientPlayer.sendMessage(getPrivateMessageTemplate(false, getDisplayNameTemplate(sendingUser), getDisplayNameTemplate(recipientUser), privateMessage));
 
         recipientUser.setLastRepliedPlayer(sendingUser.getUniqueUUID());
         sendingUser.setLastRepliedPlayer(recipientUser.getUniqueUUID());
 
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             Profile onlineUser = RedrockPlugin.getInstance().getProfileManager().getProfile(onlinePlayer.getUniqueId());
-            if (onlineUser.getRankType().isAboveOrEqual(RankType.CHAT_MOD) && onlineUser.isSocialSpy())
-                onlinePlayer.sendMessage(getSpyChatTemplate(getDisplayNameTemplate(sendingUser, sendingRank), getDisplayNameTemplate(recipientUser, recipientRank), privateMessage));
+            if (onlineUser.toPlayer().hasPermission("redrock.mod") && onlineUser.isSocialSpy())
+                onlinePlayer.sendMessage(getSpyChatTemplate(getDisplayNameTemplate(sendingUser), getDisplayNameTemplate(recipientUser), privateMessage));
         }
 
         if (recipientUser.isMessagingSounds())
@@ -81,8 +78,8 @@ public class ChatManager {
         setMuteChatTime(System.currentTimeMillis() + this.defaultMuteChatTime);
     }
 
-    private String getDisplayNameTemplate(Profile user, RankType rankType) {
-        return !rankType.isAboveOrEqual(RankType.VIP) ? (C.WHITE + user.getName() + ChatColor.RESET) : (rankType
+    private String getDisplayNameTemplate(Profile user) {
+        return !user.toPlayer().hasPermission("redrock.vip") ? (C.WHITE + user.getName() + ChatColor.RESET) : (user.getActiveRank()
                 .getColor() + user.getName() + ChatColor.RESET);
     }
 

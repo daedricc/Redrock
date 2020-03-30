@@ -3,7 +3,6 @@ package com.climpy.punishments.history;
 import com.climpy.Locale;
 import com.climpy.RedrockPlugin;
 import com.climpy.profile.Profile;
-import com.climpy.profile.rank.RankType;
 import com.climpy.punishments.Punishment;
 import com.climpy.punishments.PunishmentManager;
 import com.climpy.punishments.history.menu.HistoryCategoryMenu;
@@ -24,7 +23,7 @@ public class HistoryCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         Player player = Bukkit.getPlayer(sender.getName());
         Profile profile = RedrockPlugin.getInstance().getProfileManager().getProfile(sender.getName());
-        if (!profile.getRankType().isAboveOrEqual(RankType.MOD)) {
+        if(!profile.toPlayer().hasPermission("redrock.moderator")) {
             sender.sendMessage(Locale.format(Locale.NO_PERM));
             return true;
         }
@@ -58,7 +57,7 @@ public class HistoryCommand implements CommandExecutor {
                 punishmentClearObject.addProperty("uniqueUUID", targetProfile.getUniqueUUID().toString());
                 dataPublisher.write("punishment_clear", punishmentClearObject);
 
-                sender.sendMessage(targetProfile.getRankType().getColor() + targetProfile.getName() + C.GREEN + " adlı oyuncunun ceza geçmişi temizlendi.");
+                sender.sendMessage(targetProfile.getActiveRank().getColor() + targetProfile.getName() + C.GREEN + " adlı oyuncunun ceza geçmişi temizlendi.");
                 break;
             }
 

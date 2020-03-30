@@ -93,7 +93,7 @@ public class ProfileListener implements Listener {
             return;
         }
 
-        profileManager.getProfiles().put(profile.getUniqueUUID(), profile);
+        profileManager.profiles.put(profile.getUniqueUUID(), profile);
         new BukkitRunnable() {
 
             @Override
@@ -114,7 +114,7 @@ public class ProfileListener implements Listener {
         event.setQuitMessage(null);
 
         Player player = event.getPlayer();
-        Profile profile = RedrockPlugin.getInstance().getProfileManager().getProfiles().remove(player.getUniqueId());
+        Profile profile = RedrockPlugin.getInstance().getProfileManager().profiles.remove(player.getUniqueId());
         if (profile != null) {
             new BukkitRunnable() {
 
@@ -151,6 +151,6 @@ public class ProfileListener implements Listener {
             return;
         }
 
-        profile.setupBukkitPlayer(player);
+        profile.setupPermissionsAttachment(player);
     }
 }

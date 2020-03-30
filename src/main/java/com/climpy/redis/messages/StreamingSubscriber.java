@@ -23,7 +23,7 @@ public class StreamingSubscriber extends DataSubscriber {
         Profile profile = RedrockPlugin.getInstance().getProfileManager().getProfile(uuid);
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             onlinePlayer.sendMessage(" ");
-            onlinePlayer.sendMessage(C.GOLD + " » " + profile.getRankType().getColor() + profile.getName() + C.YELLOW + " şu anda akış halinde! " + C.GRAY + "(" + streamLink + ")");
+            onlinePlayer.sendMessage(C.GOLD + " » " + profile.getActiveRank().getColor() + profile.getName() + C.YELLOW + " şu anda akış halinde! " + C.GRAY + "(" + streamLink + ")");
             onlinePlayer.sendMessage(" ");
         }
     }

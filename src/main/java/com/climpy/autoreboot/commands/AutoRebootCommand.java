@@ -4,7 +4,6 @@ import com.climpy.Locale;
 import com.climpy.RedrockPlugin;
 import com.climpy.autoreboot.AutoRebootHandler;
 import com.climpy.profile.Profile;
-import com.climpy.profile.rank.RankType;
 import com.climpy.utils.C;
 import com.climpy.utils.TimeUtils;
 import org.bukkit.Bukkit;
@@ -23,10 +22,10 @@ public class AutoRebootCommand implements CommandExecutor {
         Player player = Bukkit.getPlayer(sender.getName());
         Profile user = RedrockPlugin.getInstance().getProfileManager().getProfile(sender.getName());
         if (sender instanceof Player) {
-            if (!user.getRankType().isAboveOrEqual(RankType.MOD)) {
-                sender.sendMessage(Locale.format(Locale.NO_PERM));
-                return true;
-            }
+            if(!user.toPlayer().hasPermission("redrock.moderator")) {
+            sender.sendMessage(Locale.format(Locale.NO_PERM));
+            return true;
+        }
         }
 
         if (args.length < 1) {

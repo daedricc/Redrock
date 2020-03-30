@@ -12,7 +12,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.ArrayList;
@@ -62,7 +61,7 @@ public class MinerTeleporterItem extends StaffModeItem {
             Player randomPlayer = players.get(random.nextInt(players.size()));
             Profile randomPlayerProfile = profileManager.getProfile(randomPlayer.getUniqueId());
             player.teleport(randomPlayer);
-            player.sendMessage(randomPlayerProfile.getRankType().getColor() + randomPlayer.getName() + C.GREEN + " adlı oyuncuya ışınlandınız.");
+            player.sendMessage(randomPlayerProfile.getActiveRank().getColor() + randomPlayer.getName() + C.GREEN + " adlı oyuncuya ışınlandınız.");
         }
     }
 }

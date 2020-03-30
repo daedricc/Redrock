@@ -1,7 +1,7 @@
 package com.climpy;
 
 import com.climpy.autoreboot.AutoRebootHandler;
-import com.climpy.command.RedrockCommandHandler;
+import com.climpy.command.handler.RedrockCommandHandler;
 import com.climpy.config.FileConfig;
 import com.climpy.deathmessage.RedrockDeathMessageHandler;
 import com.climpy.inv.InventoryManager;
@@ -13,6 +13,7 @@ import com.climpy.manager.ChatManager;
 import com.climpy.mongo.MongoConnection;
 import com.climpy.profile.Profile;
 import com.climpy.profile.ProfileManager;
+import com.climpy.profile.grant.listener.GrantListener;
 import com.climpy.profile.moderator.FollowManager;
 import com.climpy.profile.moderator.StaffManager;
 import com.climpy.profile.moderator.VanishManager;
@@ -20,7 +21,7 @@ import com.climpy.profile.listener.ProfileListener;
 import com.climpy.profile.moderator.listener.FollowListener;
 import com.climpy.profile.moderator.listener.StaffListener;
 import com.climpy.profile.moderator.listener.VanishListener;
-import com.climpy.profile.rank.RankType;
+import com.climpy.profile.rank.Rank;
 import com.climpy.profile.redis.RedisPlayerCache;
 import com.climpy.punishments.PunishmentListener;
 import com.climpy.punishments.PunishmentManager;
@@ -57,6 +58,8 @@ public class RedrockPlugin extends JavaPlugin {
 
     private MongoConnection mongoConnection;
 
+    private RedrockCommandHandler redrockCommandHandler;
+
     private boolean enableRedisPubSub = false;
 
     private String serverName;
@@ -92,7 +95,7 @@ public class RedrockPlugin extends JavaPlugin {
 
         registerManagers();
         registerListeners();
-        RedrockCommandHandler.init();
+        this.redrockCommandHandler.init();
 
         if (!this.redisConnection.isSetupMode()) {
             getLogger().log(Level.INFO, "[Redis] - Sunucu: " + this.serverName + " - ID: " + serverID + " - Sunucu Tipi: " + this.getServerType().getDisplayName());
@@ -104,7 +107,7 @@ public class RedrockPlugin extends JavaPlugin {
                 continue;
             }
 
-            if (profile.getRankType().isAboveOrEqual(RankType.MOD)) {
+            if (profile.toPlayer().hasPermission("redrock.mod")) {
                 if (profile.isStaffMode() && !this.staffManager.getStaffs().contains(profile.getUniqueUUID())) {
                     this.staffManager.setStaffMode(profile.getUniqueUUID(), true);
                 }
@@ -128,7 +131,7 @@ public class RedrockPlugin extends JavaPlugin {
                 continue;
             }
 
-            if (profile.getRankType().isAboveOrEqual(RankType.MOD) && profile.isStaffMode()) {
+            if (profile.toPlayer().hasPermission("redrock.mod") && profile.isStaffMode()) {
                 this.staffManager.setStaffMode(profile.getUniqueUUID(), false);
             }
         }
@@ -142,6 +145,7 @@ public class RedrockPlugin extends JavaPlugin {
 
         pm.registerEvents(new ChannelListener(), this);
         pm.registerEvents(new ProfileListener(), this);
+        pm.registerEvents(new GrantListener(this), this);
         pm.registerEvents(new RedrockListener(), this);
         pm.registerEvents(new PunishmentListener(), this);
         pm.registerEvents(new ChatListener(), this);
@@ -176,6 +180,7 @@ public class RedrockPlugin extends JavaPlugin {
 
         mongoConnection = new MongoConnection();
         mongoConnection.setupDatabaseConnection();
+        Rank.init();
         profileManager = new ProfileManager();
         this.redisConnection = new RedisConnection(this);
         this.redisManager = new RedisManager(this);
@@ -188,6 +193,7 @@ public class RedrockPlugin extends JavaPlugin {
         this.vanishManager = new VanishManager();
         this.chatManager = new ChatManager(this);
         this.followManager = new FollowManager();
+        this.redrockCommandHandler = new RedrockCommandHandler();
 
         AutoRebootHandler.init();
         RedrockDeathMessageHandler.init();

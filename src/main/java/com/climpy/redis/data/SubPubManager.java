@@ -35,6 +35,8 @@ public class SubPubManager {
         this.subscribers.add(new PunishmentSubscriber());
         this.subscribers.add(new PunishmentClearSubscricber());
         this.subscribers.add(new StreamingSubscriber());
+        this.subscribers.add(new AddGrantSubsricber());
+        this.subscribers.add(new DeleteGrantSubsricber());
     }
 
     public void createConnection() {

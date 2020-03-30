@@ -3,7 +3,6 @@ package com.climpy.punishments;
 import com.climpy.RedrockPlugin;
 import com.climpy.profile.Profile;
 import com.climpy.profile.ProfileManager;
-import com.climpy.profile.rank.RankType;
 import com.climpy.punishments.event.PunishmentApplyEvent;
 import com.climpy.punishments.event.PunishmentExpireEvent;
 import org.bukkit.Bukkit;
@@ -28,7 +27,7 @@ public class PunishmentListener implements Listener {
         if (announce) {
             for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                 Profile profile = profileManager.getProfile(onlinePlayer.getUniqueId());
-                if (silent && !profile.getRankType().isAboveOrEqual(RankType.CHAT_MOD)) {
+                if (silent && !profile.toPlayer().hasPermission("redrock.mod")) {
                     continue;
                 }
 

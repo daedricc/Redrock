@@ -5,7 +5,6 @@ import com.climpy.profile.Profile;
 import com.climpy.profile.ProfileManager;
 import com.climpy.profile.moderator.StaffManager;
 import com.climpy.profile.moderator.VanishManager;
-import com.climpy.profile.rank.RankType;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -39,7 +38,7 @@ public class StaffListener implements Listener {
                 vanishManager.setVanishStatus(profile.getUniqueUUID(), false);
             }
 
-        } else if (profile.getRankType().isAboveOrEqual(RankType.MOD) && (profile.isVanishStatus() || profile.isStaffMode())) {
+        } else if (profile.toPlayer().hasPermission("redrock.mod") && (profile.isVanishStatus() || profile.isStaffMode())) {
             Bukkit.getScheduler().runTaskLater(RedrockPlugin.getInstance(), ()-> {
                 if (!staffManager.getStaffs().contains(profile.getUniqueUUID())) {
                     staffManager.setStaffMode(profile.getUniqueUUID(), true);

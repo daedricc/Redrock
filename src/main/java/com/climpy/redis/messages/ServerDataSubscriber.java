@@ -2,7 +2,6 @@ package com.climpy.redis.messages;
 
 import com.climpy.RedrockPlugin;
 import com.climpy.profile.Profile;
-import com.climpy.profile.rank.RankType;
 import com.climpy.redis.RedisManager;
 import com.climpy.redis.data.DataSubscriber;
 import com.climpy.server.ServerData;
@@ -52,7 +51,7 @@ public class ServerDataSubscriber extends DataSubscriber {
             serverData = new ServerData();
             for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                 Profile onlineUser = RedrockPlugin.getInstance().getProfileManager().getProfile(onlinePlayer.getUniqueId());
-                if (onlineUser.getRankType().isAboveOrEqual(RankType.CHAT_MOD)) {
+                if (onlineUser.toPlayer().hasPermission("redrock.mod")) {
                     String stringBuilder = C.GRAY + "[Network] " + C.WHITE + "Sunucu ağa eklendi, " + serverName + ".";
                     onlinePlayer.sendMessage(stringBuilder);
                 }

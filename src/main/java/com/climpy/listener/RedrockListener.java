@@ -2,7 +2,6 @@ package com.climpy.listener;
 
 import com.climpy.RedrockPlugin;
 import com.climpy.profile.Profile;
-import com.climpy.profile.rank.RankType;
 import com.climpy.redis.RedisConnection;
 import com.climpy.redis.RedisManager;
 import com.climpy.redis.data.DataPublisher;
@@ -27,7 +26,7 @@ public class RedrockListener implements Listener {
         Profile user = RedrockPlugin.getInstance().getProfileManager().getProfile(player.getName());
 
         DefaultServerProvider defaultServerProvider = new DefaultServerProvider();
-        if (user.getRankType().isAboveOrEqual(RankType.CHAT_MOD)) {
+        if (user.toPlayer().hasPermission("redrock.mod")) {
             DataPublisher dataPublisher = RedrockPlugin.getInstance().getRedisConnection().getDataPublisher();
             JsonObject staffObject = new JsonObject();
             StaffSubscriber.StaffEventType staffEventType = StaffSubscriber.StaffEventType.JOIN;
@@ -46,7 +45,7 @@ public class RedrockListener implements Listener {
         Profile user = RedrockPlugin.getInstance().getProfileManager().getProfile(player.getUniqueId());
 
         DefaultServerProvider defaultServerProvider = new DefaultServerProvider();
-        if (user.getRankType().isAboveOrEqual(RankType.CHAT_MOD)) {
+        if (user.toPlayer().hasPermission("redrock.mod")) {
             DataPublisher dataPublisher = RedrockPlugin.getInstance().getRedisConnection().getDataPublisher();
             JsonObject staffObject = new JsonObject();
             StaffSubscriber.StaffEventType staffEventType = StaffSubscriber.StaffEventType.QUIT;
@@ -74,7 +73,7 @@ public class RedrockListener implements Listener {
         Player eventPlayer = event.getPlayer();
         if (redisConnection.isSetupMode()) {
             Profile eventUser = RedrockPlugin.getInstance().getProfileManager().getProfile(eventPlayer.getUniqueId());
-            if (eventUser.getRankType().isAboveOrEqual(RankType.MOD) && eventUser.isStaffChat())
+            if (eventUser.toPlayer().hasPermission("redrock.mod") && eventUser.isStaffChat())
                 return;
             event.setCancelled(true);
             eventPlayer.sendMessage(ChatColor.RED + "Sunucu kuruluyor..");
@@ -93,7 +92,7 @@ public class RedrockListener implements Listener {
         if (serverData == null)
             return;
         Profile eventUser = RedrockPlugin.getInstance().getProfileManager().getProfile(eventPlayer.getUniqueId());
-        if (!eventUser.getRankType().isAboveOrEqual(RankType.CHAT_MOD)) {
+        if (!eventUser.toPlayer().hasPermission("redrock.mod")) {
             event.setCancelled(true);
             String kickReason = ChatColor.RED + "Sunucudan atıldınız: " + ChatColor.LIGHT_PURPLE + serverName + ChatColor.RED + ": " + ChatColor.YELLOW + event.getReason();
             redisManager.kickRedisServer(eventUser.getUniqueUUID(), serverData, kickReason);

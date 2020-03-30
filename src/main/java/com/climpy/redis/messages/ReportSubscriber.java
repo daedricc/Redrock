@@ -2,7 +2,6 @@ package com.climpy.redis.messages;
 
 import com.climpy.RedrockPlugin;
 import com.climpy.profile.Profile;
-import com.climpy.profile.rank.RankType;
 import com.climpy.redis.data.DataSubscriber;
 import com.google.gson.JsonObject;
 import org.bukkit.Bukkit;
@@ -25,7 +24,7 @@ public class ReportSubscriber extends DataSubscriber {
         Profile reporterUser = RedrockPlugin.getInstance().getProfileManager().getProfile(reporterUUID);
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             Profile onlineUser = RedrockPlugin.getInstance().getProfileManager().getProfile(onlinePlayer.getUniqueId());
-            if (onlineUser.getRankType().isAboveOrEqual(RankType.CHAT_MOD)) {
+            if (onlineUser.toPlayer().hasPermission("redrock.chatmod")) {
                 String stringBuilder = ChatColor.GOLD + "[Rapor] " + ChatColor.WHITE + "[" + serverName + "] " + ChatColor.YELLOW + reportedUser.getName() + ChatColor.GRAY + ", " + ChatColor.YELLOW + reporterUser.getName() + ChatColor.GRAY + " tarafından raporlandı.\n" + ChatColor.GOLD + "     Neden: " + ChatColor.GRAY + message;
                 onlinePlayer.sendMessage(stringBuilder);
             }

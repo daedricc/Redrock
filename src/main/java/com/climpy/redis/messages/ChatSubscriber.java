@@ -3,7 +3,7 @@ package com.climpy.redis.messages;
 import com.climpy.RedrockPlugin;
 import com.climpy.profile.Profile;
 import com.climpy.profile.ProfileManager;
-import com.climpy.profile.rank.RankType;
+import com.climpy.profile.rank.Rank;
 import com.climpy.redis.data.DataSubscriber;
 import com.google.gson.JsonObject;
 import org.bukkit.Bukkit;
@@ -23,8 +23,7 @@ public class ChatSubscriber extends DataSubscriber {
         String message = object.get("message").getAsString();
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             Profile onlineUser = RedrockPlugin.getInstance().getProfileManager().getProfile(onlinePlayer.getUniqueId());
-            RankType rankType = onlineUser.getRankType();
-            if (rankType.isAboveOrEqual(RankType.CHAT_MOD))
+            if (onlineUser.toPlayer().hasPermission("redrock.mod"))
                 onlinePlayer.sendMessage(setMessageFormat(serverName, setPrefix(uuid), message));
         }
     }
@@ -38,7 +37,7 @@ public class ChatSubscriber extends DataSubscriber {
     private String setPrefix(UUID eventPlayerUUID) {
         ProfileManager profileManager = RedrockPlugin.getInstance().getProfileManager();
         Profile eventUser = RedrockPlugin.getInstance().getProfileManager().getProfile(eventPlayerUUID);
-        eventUser.getRankType();
-        return eventUser.getRankType().getColor() + eventUser.getName() + ChatColor.RESET;
+        eventUser.getActiveRank();
+        return eventUser.getActiveRank().getColor() + eventUser.getName() + ChatColor.RESET;
     }
 }

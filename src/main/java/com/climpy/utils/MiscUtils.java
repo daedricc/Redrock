@@ -2,11 +2,10 @@ package com.climpy.utils;
 
 import com.climpy.RedrockPlugin;
 import com.climpy.profile.Profile;
-import com.climpy.profile.rank.RankType;
 import com.climpy.punishments.Punishment;
 import com.climpy.punishments.PunishmentManager;
 import com.climpy.report.ReportManager;
-import org.bukkit.Bukkit;
+import com.google.common.base.Preconditions;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -20,6 +19,7 @@ import java.text.DecimalFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class MiscUtils {
     public static boolean patternCheck(String message, Pattern pattern) {
@@ -38,6 +38,17 @@ public class MiscUtils {
         }
 
         return generatedRandomID;
+    }
+
+    public static List<String> getCompletions(String[] args, List<String> input) {
+        return getCompletions(args, input, 80);
+    }
+
+    public static List<String> getCompletions(String[] args, List<String> input, int limit) {
+        Preconditions.checkNotNull(args);
+        Preconditions.checkArgument((args.length != 0));
+        String argument = args[args.length - 1];
+        return (List<String>)input.stream().filter(string -> string.regionMatches(true, 0, string, 0, string.length())).limit(limit).collect(Collectors.toList());
     }
 
     public static String generatePunishmentRandomID() {
@@ -116,17 +127,6 @@ public class MiscUtils {
         return joiner.toString();
     }
 
-    public static void broadcastWithRank(String message, RankType rankType) {
-        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-            Profile onlineUser = RedrockPlugin.getInstance().getProfileManager().getProfile(onlinePlayer.getUniqueId());
-            RankType userRankType = onlineUser.getRankType();
-
-            if (userRankType.isAboveOrEqual(rankType)) {
-                onlinePlayer.sendMessage(message);
-            }
-        }
-    }
-
     public static long stringTimeReplacer(CommandSender sender, String durationString) {
         if (durationString.substring(0, 1).matches("[0-9]")) {
 
@@ -155,7 +155,7 @@ public class MiscUtils {
                 }
 
                 Profile basicUser = RedrockPlugin.getInstance().getProfileManager().getProfile(sender.getName());
-                if (basicUser != null && !basicUser.getRankType().isAboveOrEqual(RankType.ADMIN) && duration > 31536000000L) {
+                if (basicUser != null && !basicUser.toPlayer().hasPermission("redrock.admin") && duration > 31536000000L) {
                     sender.sendMessage(ChatColor.RED + "En fazla 1 yıla kadar işlem uygulaya bilirsiniz.");
                     return -30L;
                 }

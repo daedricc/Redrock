@@ -3,7 +3,6 @@ package com.climpy.punishments.args;
 import com.climpy.Locale;
 import com.climpy.RedrockPlugin;
 import com.climpy.profile.Profile;
-import com.climpy.profile.rank.RankType;
 import com.climpy.punishments.Punishment;
 import com.climpy.punishments.PunishmentManager;
 import com.climpy.punishments.PunishmentType;
@@ -24,10 +23,10 @@ public class BanCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         Profile profile = RedrockPlugin.getInstance().getProfileManager().getProfile(sender.getName());
         if (!(sender instanceof ConsoleCommandSender)) {
-            if (!profile.getRankType().isAboveOrEqual(RankType.MOD)) {
-                sender.sendMessage(Locale.format(Locale.NO_PERM));
-                return true;
-            }
+            if(!profile.toPlayer().hasPermission("redrock.moderator")) {
+            sender.sendMessage(Locale.format(Locale.NO_PERM));
+            return true;
+        }
         }
 
         if (args.length < 1) {

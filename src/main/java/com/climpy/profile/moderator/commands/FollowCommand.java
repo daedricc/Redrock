@@ -4,7 +4,6 @@ import com.climpy.Locale;
 import com.climpy.RedrockPlugin;
 import com.climpy.profile.Profile;
 import com.climpy.profile.moderator.FollowManager;
-import com.climpy.profile.rank.RankType;
 import com.climpy.utils.C;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -20,10 +19,10 @@ public class FollowCommand implements CommandExecutor {
         Player player = Bukkit.getPlayer(sender.getName());
         if (sender instanceof Player) {
             Profile profile = RedrockPlugin.getInstance().getProfileManager().getProfile(player.getUniqueId());
-            if (!profile.getRankType().isAboveOrEqual(RankType.MOD)) {
-                sender.sendMessage(Locale.format(Locale.NO_PERM));
-                return true;
-            }
+            if(!profile.toPlayer().hasPermission("redrock.moderator")) {
+            sender.sendMessage(Locale.format(Locale.NO_PERM));
+            return true;
+        }
 
             if(args.length < 1) {
                 player.sendMessage(C.RED + "Kullanım: /" + label + " <oyuncuAdı..>");
@@ -57,7 +56,7 @@ public class FollowCommand implements CommandExecutor {
             }
 
             followManager.startFollowing(player.getUniqueId(), targetPlayer.getUniqueId());
-            player.sendMessage(targetProfile.getRankType().getColor() + targetPlayer.getName() + C.GOLD + " adlı oyuncuyu takip ediyorsun.");
+            player.sendMessage(targetProfile.getActiveRank().getColor() + targetPlayer.getName() + C.GOLD + " adlı oyuncuyu takip ediyorsun.");
         }
         return true;
     }

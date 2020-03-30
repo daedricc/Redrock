@@ -4,10 +4,8 @@ import com.climpy.inv.ClickableItem;
 import com.climpy.inv.SmartInventory;
 import com.climpy.inv.content.InventoryContents;
 import com.climpy.inv.content.InventoryProvider;
-import com.climpy.inv.content.SlotPos;
 import com.climpy.profile.Profile;
 import com.climpy.utils.C;
-import com.climpy.utils.DateTimeUtils;
 import com.climpy.utils.ItemUtils;
 import com.climpy.utils.TimeUtils;
 import lombok.Getter;
@@ -15,11 +13,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Getter
@@ -35,7 +31,7 @@ public class InspectorMenu implements InventoryProvider {
         return SmartInventory.builder()
                 .provider(new InspectorMenu(profile))
                 .size(6, 9)
-                .title("&8İnceleniyor: " + profile.getRankType().getColor() + profile.getName())
+                .title("&8İnceleniyor: " + profile.getActiveRank().getColor() + profile.getName())
                 .build();
     }
 

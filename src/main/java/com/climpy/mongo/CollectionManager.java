@@ -26,6 +26,7 @@ public class CollectionManager {
 
         this.collections.add("user");
         this.collections.add("report");
+        this.collections.add("ranks");
     }
 
     public void createDataConnection() {
@@ -39,7 +40,7 @@ public class CollectionManager {
                 String[] names = new String[this.collections.size()];
                 for (int index = 0; index < names.length; ) {
                     for (String collection : this.collections) {
-                        RedrockPlugin.getInstance().getLogger().log(Level.INFO, "[MongoDB] [" + (index + 1) + "] - " + collection + " collections sisteme işleniyor.");
+                        RedrockPlugin.getInstance().getLogger().log(Level.INFO, "[MongoDB] [" + (index + 1) + "] - " + collection + " collections sisteme isleniyor.");
                         names[index++] = collection;
                     }
                 }
