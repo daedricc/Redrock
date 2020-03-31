@@ -26,11 +26,11 @@ public class GrantCommand extends RedrockCommand {
 
     @Override
     public RedrockResultCommand execute(CommandSender sender, Command command, String label, String[] args) {
-        if (!hasPermission(sender, "cookie.command.grant"))
+        if (!hasPermission(sender, "redrock.mod"))
             return RedrockResultCommand.INVALID_PERMISSION;
 
         if (args.length < 4) {
-            setUsage(String.valueOf(label) + " <player> <rank> <duration> <reason>");
+            setUsage(String.valueOf(label) + " <oyuncuAdı> <yetki> <süre> <sebep>");
             return RedrockResultCommand.INVALID_USAGE;
         }
 

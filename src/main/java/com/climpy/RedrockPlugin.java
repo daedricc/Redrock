@@ -205,6 +205,7 @@ public class RedrockPlugin extends JavaPlugin {
         (new ServerDataTask(this)).runTaskTimerAsynchronously(this, 50L, 50L);
         (new ServerRemoveTask(this)).runTaskTimerAsynchronously(this, 20L, 20L);
         Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Lag(), 100L, 1L);
+        Profile.runnable();
     }
 
     public static RedrockPlugin getInstance() {

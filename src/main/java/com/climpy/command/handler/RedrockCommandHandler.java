@@ -19,6 +19,7 @@ import com.climpy.command.extnds.network.players.RequestCommand;
 import com.climpy.profile.commands.ProfileCommand;
 import com.climpy.profile.commands.StaffChatCommand;
 import com.climpy.profile.grant.args.GrantCommand;
+import com.climpy.profile.grant.args.GrantsCommand;
 import com.climpy.profile.moderator.commands.FollowCommand;
 import com.climpy.profile.moderator.commands.StaffModeCommand;
 import com.climpy.profile.moderator.commands.UnFollowCommand;
@@ -50,6 +51,7 @@ public class RedrockCommandHandler {
     private void registerCommands() {
         this.redrockRegisterCommand.registerBukkitCommand((RedrockCommand) new TestCommand(), (Plugin) RedrockPlugin.getInstance());
         this.redrockRegisterCommand.registerBukkitCommand((RedrockCommand) new GrantCommand(), (Plugin) RedrockPlugin.getInstance());
+        this.redrockRegisterCommand.registerBukkitCommand((RedrockCommand) new GrantsCommand(), (Plugin) RedrockPlugin.getInstance());
     }
 
     private void bukkitRegisterCommands() {

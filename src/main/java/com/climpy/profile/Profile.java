@@ -83,7 +83,7 @@ public class Profile {
         for (Grant grant : this.grants) {
             if (!grant.isRemoved() && grant.hasExpired()) {
                 grant.setRemovedAt(System.currentTimeMillis());
-                grant.setRemovedReason("Grant expired");
+                grant.setRemovedReason("Süre aşımı");
                 grant.setRemoved(true);
                 if (this.activeGrant != null && this.activeGrant.equals(grant))
                     this.activeGrant = null;
@@ -101,6 +101,7 @@ public class Profile {
             Grant grant = new Grant(UUID.randomUUID(), Rank.getDefaultRank(), null, System.currentTimeMillis(), "Default", 2147483647L);
             this.grants.add(grant);
             setActiveGrant(grant);
+
             Player player = toPlayer();
             if (player != null)
                 Bukkit.getPluginManager().callEvent(new GrantAppliedEvent(player, grant));
@@ -267,4 +268,22 @@ public class Profile {
         return this.grants;
     }
 
+    public static void runnable() {
+        (new BukkitRunnable() {
+            public void run() {
+                for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                    Profile profile = RedrockPlugin.getInstance().getProfileManager().getProfile(onlinePlayer.getUniqueId());
+                    profile.checkGrants();
+                }
+            }
+        }).runTaskTimerAsynchronously((Plugin)RedrockPlugin.getInstance(), 20L, 20L);
+        (new BukkitRunnable() {
+            public void run() {
+                Bukkit.getOnlinePlayers().forEach(players -> {
+                    Profile profile = RedrockPlugin.getInstance().getProfileManager().getProfile(players.getUniqueId());
+                    profile.setupPermissionsAttachment(players);
+                });
+            }
+        }).runTaskTimerAsynchronously((Plugin)RedrockPlugin.getInstance(), 20L, 20L);
+    }
 }
