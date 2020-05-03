@@ -1,0 +1,9 @@
+server:
+  name: Lobi
+  type: lobi
+  id: 1
+max-redis-connections: 10
+redis:
+  server: "redis-14918.c228.us-central1-1.gce.cloud.redislabs.com"
+  port: 14918
+  password: "He3xNSiMeXaffh6cD47wOtJftonrL99v"

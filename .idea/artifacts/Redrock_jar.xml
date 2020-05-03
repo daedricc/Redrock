@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Redrock:jar">
+    <output-path>$USER_HOME$/Desktop/Proxy/Redrock/plugins</output-path>
+    <root id="archive" name="Redrock.jar">
+      <element id="module-output" name="Redrock" />
+    </root>
+  </artifact>
+</component>
