@@ -20,13 +20,13 @@ import java.util.List;
 
 public class ServerChangeCommand extends RedrockCommand {
     public ServerChangeCommand() {
-        super("serverchange");
+        super("serverchange", "Sunucuyu değiştirir.");
     }
 
     @Override
     public RedrockResultCommand execute(CommandSender sender, Command command, String label, String[] args) {
-        Profile user = TorchPlugin.getInstance().getProfileManager().getProfile(sender.getName());
-        if (!user.toPlayer().hasPermission("redrock.moderator")) {
+        Profile profile = TorchPlugin.getInstance().getProfileManager().getProfile(sender.getName());
+        if (!profile.toPlayer().hasPermission("redrock.server.change") || (!profile.toPlayer().hasPermission("redrock.server.*"))) {
             return RedrockResultCommand.INVALID_PERMISSION;
         }
 
@@ -57,7 +57,7 @@ public class ServerChangeCommand extends RedrockCommand {
             return RedrockResultCommand.SUCCESS;
         }
 
-        redisManager.sendRedisServer(user.getUniqueUUID(), serverData);
+        redisManager.sendRedisServer(profile.getUniqueUUID(), serverData);
         sender.sendMessage(ChatColor.GOLD + "Gönderiliyor: " + ChatColor.WHITE + serverName + ChatColor.GOLD + "..");
         return RedrockResultCommand.SUCCESS;
     }

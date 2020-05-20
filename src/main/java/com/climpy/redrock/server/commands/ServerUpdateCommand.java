@@ -14,13 +14,13 @@ import java.util.logging.Level;
 
 public class ServerUpdateCommand extends RedrockCommand {
     public ServerUpdateCommand() {
-        super("serverupdate");
+        super("serverupdate", "Redis bilgilerini günceller.");
     }
 
     @Override
     public RedrockResultCommand execute(CommandSender sender, Command command, String label, String[] args) {
-        Profile user = TorchPlugin.getInstance().getProfileManager().getProfile(sender.getName());
-        if (!user.toPlayer().hasPermission("redrock.moderator")) {
+        Profile profile = TorchPlugin.getInstance().getProfileManager().getProfile(sender.getName());
+        if (!profile.toPlayer().hasPermission("redrock.server.update") || (!profile.toPlayer().hasPermission("redrock.server.*"))) {
             return RedrockResultCommand.INVALID_PERMISSION;
         }
 
