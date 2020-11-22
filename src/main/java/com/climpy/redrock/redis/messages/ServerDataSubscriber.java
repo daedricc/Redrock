@@ -6,11 +6,11 @@ import com.climpy.redrock.redis.data.DataSubscriber;
 import com.climpy.redrock.server.ServerData;
 import com.climpy.redrock.server.ServerState;
 import com.climpy.redrock.server.ServerType;
-import com.climpy.redrock.utils.C;
 import com.climpy.torch.TorchPlugin;
 import com.climpy.torch.profile.Profile;
 import com.google.gson.JsonObject;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.net.InetSocketAddress;
@@ -53,7 +53,7 @@ public class ServerDataSubscriber extends DataSubscriber {
             for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                 Profile onlineUser = TorchPlugin.getInstance().getProfileManager().getProfile(onlinePlayer.getUniqueId());
                 if (onlineUser.toPlayer().hasPermission("redrock.moderator")) {
-                    String stringBuilder = C.GRAY + "[Network] " + C.WHITE + "Sunucu ağa eklendi, " + serverName + ".";
+                    String stringBuilder = ChatColor.GRAY + "[Network] " + ChatColor.WHITE + "Sunucu ağa eklendi, " + serverName + ".";
                     onlinePlayer.sendMessage(stringBuilder);
                 }
             }

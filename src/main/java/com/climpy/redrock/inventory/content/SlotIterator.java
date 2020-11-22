@@ -1,6 +1,5 @@
 package com.climpy.redrock.inventory.content;
 
-
 import com.climpy.redrock.inventory.ClickableItem;
 import com.climpy.redrock.inventory.SmartInventory;
 

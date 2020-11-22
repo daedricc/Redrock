@@ -120,7 +120,9 @@ public class TimeUtils {
     }
 
     public static String getDurationWords(long durationMillis, boolean suppressLeadingZeroElements, boolean suppressTrailingZeroElements, String timeFormat) {
-
+        if (durationMillis <= 0) {
+            return "Süre değeri sıfırdan büyük olmalıdır!";
+        }
 
         String duration = DurationFormatUtils.formatDuration(durationMillis, timeFormat);
         String tmp;

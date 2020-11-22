@@ -5,6 +5,7 @@ public enum ServerType {
     PRACTICE("Practice", "practice", false),
     SURVIVAL_GAMES("Survival Games", "survival games", false),
     GAME_LOBBY("Oyun Lobisi", "game lobby", true),
+    TEST_SERVER("Test Server", "test server", true),
     UNKNOWN("Unknown", "unknown", false);
 
     ServerType(String displayName, String internalName, boolean announceable) {

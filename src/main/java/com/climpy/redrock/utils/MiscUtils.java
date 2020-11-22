@@ -1,9 +1,11 @@
 package com.climpy.redrock.utils;
 
 import com.climpy.redrock.RedrockPlugin;
+import com.climpy.redrock.report.ReportManager;
 import com.climpy.torch.TorchPlugin;
 import com.climpy.torch.profile.Profile;
-import com.google.common.base.Preconditions;
+import com.climpy.torch.punishments.Punishment;
+import com.climpy.torch.punishments.PunishmentManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -17,7 +19,6 @@ import java.text.DecimalFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class MiscUtils {
     public static boolean patternCheck(String message, Pattern pattern) {
@@ -27,7 +28,7 @@ public class MiscUtils {
         return false;
     }
 
-    /*public static String generateReportRandomID() {
+    public static String generateReportRandomID() {
         ReportManager reportManager = RedrockPlugin.getInstance().getReportManager();
         String generatedRandomID = generateRandomIDMethod();
 
@@ -36,23 +37,12 @@ public class MiscUtils {
         }
 
         return generatedRandomID;
-    } */
-
-    public static List<String> getCompletions(String[] args, List<String> input) {
-        return getCompletions(args, input, 80);
-    }
-
-    public static List<String> getCompletions(String[] args, List<String> input, int limit) {
-        Preconditions.checkNotNull(args);
-        Preconditions.checkArgument((args.length != 0));
-        String argument = args[args.length - 1];
-        return (List<String>) input.stream().filter(string -> string.regionMatches(true, 0, string, 0, string.length())).limit(limit).collect(Collectors.toList());
     }
 
     public static String generatePunishmentRandomID() {
         String generatedRandomID = generateRandomIDMethod();
 
-       /* PunishmentManager punishmentManager = RedrockPlugin.getInstance().getPunishmentManager();
+        PunishmentManager punishmentManager = TorchPlugin.getInstance().getPunishmentManager();
         Map<UUID, List<Punishment>> allPunishments = punishmentManager.getDatabasePunishments();
 
         for (List<Punishment> punishments : allPunishments.values()) {
@@ -61,7 +51,7 @@ public class MiscUtils {
                     return generateRandomIDMethod();
                 }
             }
-        } */
+        }
 
         return generatedRandomID;
     }
@@ -125,6 +115,7 @@ public class MiscUtils {
         return joiner.toString();
     }
 
+
     public static long stringTimeReplacer(CommandSender sender, String durationString) {
         if (durationString.substring(0, 1).matches("[0-9]")) {
 
@@ -153,7 +144,7 @@ public class MiscUtils {
                 }
 
                 Profile basicUser = TorchPlugin.getInstance().getProfileManager().getProfile(sender.getName());
-                if (basicUser != null && !basicUser.toPlayer().hasPermission("redrock.admin") && duration > 31536000000L) {
+                if (basicUser != null && !basicUser.getRank().hasPermission("torch.staff") && duration > 31536000000L) {
                     sender.sendMessage(ChatColor.RED + "En fazla 1 yıla kadar işlem uygulaya bilirsiniz.");
                     return -30L;
                 }

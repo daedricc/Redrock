@@ -2,9 +2,9 @@ package com.climpy.redrock.redis.messages;
 
 import com.climpy.redrock.RedrockPlugin;
 import com.climpy.redrock.redis.data.DataSubscriber;
-import com.climpy.redrock.utils.fanciful.FancyMessage;
 import com.climpy.torch.TorchPlugin;
 import com.climpy.torch.profile.Profile;
+import com.climpy.redrock.utils.fanciful.FancyMessage;
 import com.google.gson.JsonObject;
 import lombok.Getter;
 import org.bukkit.Bukkit;

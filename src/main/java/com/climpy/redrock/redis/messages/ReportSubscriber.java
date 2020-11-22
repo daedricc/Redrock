@@ -25,7 +25,7 @@ public class ReportSubscriber extends DataSubscriber {
         Profile reporterUser = TorchPlugin.getInstance().getProfileManager().getProfile(reporterUUID);
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             Profile onlineUser = TorchPlugin.getInstance().getProfileManager().getProfile(onlinePlayer.getUniqueId());
-            if (onlineUser.toPlayer().hasPermission("redrock.chatmod")) {
+            if (onlineUser.getRank().hasPermission("torch.staff")) {
                 String stringBuilder = ChatColor.GOLD + "[Rapor] " + ChatColor.WHITE + "[" + serverName + "] " + ChatColor.YELLOW + reportedUser.getName() + ChatColor.GRAY + ", " + ChatColor.YELLOW + reporterUser.getName() + ChatColor.GRAY + " tarafından raporlandı.\n" + ChatColor.GOLD + "     Neden: " + ChatColor.GRAY + message;
                 onlinePlayer.sendMessage(stringBuilder);
             }

@@ -2,7 +2,6 @@ package com.climpy.redrock.redis.data;
 
 import com.climpy.redrock.RedrockPlugin;
 import com.climpy.redrock.redis.messages.*;
-import com.climpy.redrock.utils.C;
 import com.climpy.redrock.utils.ConfigUtils;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
@@ -36,6 +35,8 @@ public class SubPubManager {
         this.subscribers.add(new WhitelistSubscriber());
         this.subscribers.add(new PunishmentSubscriber());
         this.subscribers.add(new PunishmentClearSubscricber());
+        this.subscribers.add(new CreateRankSubscriber());
+        this.subscribers.add(new DeleteRankSubscriber());
     }
 
     public void createConnection() {
@@ -69,17 +70,17 @@ public class SubPubManager {
                     this.redrockPlugin.getLogger().log(Level.WARNING, ex.getMessage());
                 }
                 if (RedrockPlugin.getInstance().getJedisPubSub() == null) {
-                    Bukkit.getConsoleSender().sendMessage(ChatColor.BLUE + "[Redrock] [Redis]" + C.WHITE + " Sub-Pub verileri anda bos durumda.");
+                    Bukkit.getConsoleSender().sendMessage(ChatColor.BLUE + "[Redrock] [Redis]" + ChatColor.WHITE + " Sub-Pub verileri anda bos durumda.");
                 } else {
-                    Bukkit.getConsoleSender().sendMessage(ChatColor.BLUE + "[Redrock] [Redis]" + C.WHITE + " Sub-Pub basariyla kuruldu!");
+                    Bukkit.getConsoleSender().sendMessage(ChatColor.BLUE + "[Redrock] [Redis]" + ChatColor.WHITE + " Sub-Pub basariyla kuruldu!");
                     RedrockPlugin.getInstance().setEnableRedisPubSub(true);
                 }
             } catch (IndexOutOfBoundsException | NullPointerException ex) {
-                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[Redrock] [Redis]" + C.WHITE + " Sub-Pub kurulumu sirasinda bir hata olustu.");
+                Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[Redrock] [Redis]" + ChatColor.WHITE + " Sub-Pub kurulumu sirasinda bir hata olustu.");
                 ex.printStackTrace();
             }
         } catch (Exception ex) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[Redrock] [Redis]" + C.WHITE + " Sub-Pub kurulumu sirasinda bilinmeyen hata.");
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[Redrock] [Redis]" + ChatColor.WHITE + " Sub-Pub kurulumu sirasinda bilinmeyen hata.");
             ex.printStackTrace();
         }
     }

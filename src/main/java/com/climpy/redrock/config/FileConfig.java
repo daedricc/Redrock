@@ -1,6 +1,5 @@
 package com.climpy.redrock.config;
 
-import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -10,10 +9,17 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 
-@Getter
 public class FileConfig {
     private FileConfiguration fileConfiguration;
     private File file;
+
+    public FileConfiguration getFileConfiguration() {
+        return this.fileConfiguration;
+    }
+
+    public File getFile() {
+        return this.file;
+    }
 
     public FileConfig(JavaPlugin plugin, String fileName) {
         this.file = new File(plugin.getDataFolder(), fileName);

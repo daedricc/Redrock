@@ -14,14 +14,15 @@ import java.util.logging.Level;
 
 public class ServerUpdateCommand extends RedrockCommand {
     public ServerUpdateCommand() {
-        super("serverupdate", "Redis bilgilerini günceller.");
+        super("serverupdate");
     }
 
     @Override
     public RedrockResultCommand execute(CommandSender sender, Command command, String label, String[] args) {
-        Profile profile = TorchPlugin.getInstance().getProfileManager().getProfile(sender.getName());
-        if (!profile.toPlayer().hasPermission("redrock.server.update") || (!profile.toPlayer().hasPermission("redrock.server.*"))) {
-            return RedrockResultCommand.INVALID_PERMISSION;
+        Profile user = TorchPlugin.getInstance().getProfileManager().getProfile(sender.getName());
+        if (!user.getRank().hasPermission("torch.staff")) {
+            sender.sendMessage(ChatColor.RED + "Yetkiniz yok.");
+            return RedrockResultCommand.SUCCESS;
         }
 
         Command.broadcastCommandMessage(sender, ChatColor.GOLD + "Sunucu güncellemesi başlatılıyor..");
@@ -33,7 +34,6 @@ public class ServerUpdateCommand extends RedrockCommand {
             Command.broadcastCommandMessage(sender, ChatColor.RED.toString() + ChatColor.BOLD + "Güncelleme sırasında bir hata meydana geldi!");
             RedrockPlugin.getInstance().getLogger().log(Level.SEVERE, "Hata: {0}", ex.getMessage());
         }
-
         return RedrockResultCommand.SUCCESS;
     }
 }

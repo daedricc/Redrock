@@ -5,7 +5,6 @@ import com.climpy.redrock.inventory.opener.ChestInventoryOpener;
 import com.climpy.redrock.inventory.opener.InventoryOpener;
 import com.climpy.redrock.inventory.opener.SpecialInventoryOpener;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -49,8 +48,6 @@ public class InventoryManager {
         pluginManager.registerEvents(new InvListener(), plugin);
 
         new InvTask().runTaskTimer(plugin, 1, 1);
-
-        Bukkit.getConsoleSender().sendMessage(ChatColor.BLUE + "[Redrock] [EnvanterGUI]" + ChatColor.WHITE + " Menu sistemi iliskilendirildi.");
     }
 
     public Optional<InventoryOpener> findOpener(InventoryType type) {

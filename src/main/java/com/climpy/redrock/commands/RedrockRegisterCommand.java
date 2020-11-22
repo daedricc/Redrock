@@ -1,7 +1,7 @@
 package com.climpy.redrock.commands;
 
-import com.climpy.redrock.utils.C;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.PluginCommand;
@@ -23,7 +23,7 @@ public class RedrockRegisterCommand {
             command.setAliases(Arrays.asList(aliases));
         if (redrockCommand.getDescription() != null)
             command.setDescription(redrockCommand.getDescription());
-        command.setPermissionMessage(C.RED + "Üzgünüm, yetkiniz yok.");
+        command.setPermissionMessage(ChatColor.RED + "Üzgünüm, yetkiniz yok.");
         command.setExecutor(redrockCommand);
         command.setTabCompleter(redrockCommand);
         getCommandMap().register(plugin.getDescription().getName(), (Command) command);
